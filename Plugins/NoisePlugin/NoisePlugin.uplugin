@@ -1,0 +1,31 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.4.1",
+	"FriendlyName": "Noise Plugin",
+	"Description": "A Noise Plugin implementation for UE4",
+	"Category": "Other",
+	"CreatedBy": "Yaki Studios",
+	"CreatedByURL": "http://www.yakistudios.com",
+	"DocsURL": "",
+	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/c93227758ff048db9c8c7cc48dff140c",
+	"SupportURL": "http://www.yakistudios.com",
+	"EngineVersion": "4.26.0",
+	"CanContainContent": false,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "NoisePlugin",
+			"Type": "Runtime",
+			"LoadingPhase": "PreDefault",
+			"WhitelistPlatforms": [
+				"Win64",
+				"Win32",
+				"Android",
+				"XboxOne",
+				"PS4",
+				"Linux"
+			]
+		}
+	]
+}
