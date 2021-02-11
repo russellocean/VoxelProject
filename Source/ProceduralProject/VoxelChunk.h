@@ -50,6 +50,7 @@ public:
 private:
 	bool CheckVoxelNeighbors(int32 VoxelIndex);
 	bool CompareQuad(Quad &Q1, Quad &Q2);
+	void GenerateChunkMesh();
 
 	static const FIntVector NeighborOffsets[6];
 };

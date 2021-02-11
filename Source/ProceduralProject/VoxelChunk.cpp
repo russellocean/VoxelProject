@@ -37,27 +37,16 @@ void AVoxelChunk::CreateChunk(FIntVector ChunkPosition)
 	}
 	for(int32 i = 0; i < Chunk.Voxels.Num(); i++)
 	{
-		//UVoxel* CurrentVoxel = Chunk.Voxels[i];
-		//FIntVector VoxelPosition = CurrentVoxel->GetVoxelPosition();
 		Chunk.Voxels[i]->bIsVisible = CheckVoxelNeighbors(i);
 		UE_LOG(LogTemp,Warning,TEXT("Voxel Rendered? %s"), (Chunk.Voxels[i]->bIsVisible ? TEXT("True") : TEXT("False")));
 		if(Chunk.Voxels[i]->bIsVisible)
 		{
 			DrawDebugBox(GetWorld(), FVector(Chunk.Voxels[i]->GetVoxelPosition().X, Chunk.Voxels[i]->GetVoxelPosition().Y, Chunk.Voxels[i]->GetVoxelPosition().Z) * 100, FVector(50,50,50), FColor::Green, true, -1, 0, 4 );
 		}
-
-		/*if(Chunk.Voxels[i]->bIsVisible)
-		{
-			Quad Q1(VoxelPosition.X, VoxelPosition.Y, 1,1);
-			Quad Q2(VoxelPosition.X + 1, VoxelPosition.Y + 1, 1,1);
-			if(CompareQuad(Q1, Q2));
-			{
-				Q1.W += Q2.W;
-			}
-		}*/
 	}
-	
 }
+
+
 
 bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 {
@@ -124,6 +113,26 @@ bool AVoxelChunk::CompareQuad(Quad& Q1, Quad& Q2)
 	if(Q1.X != Q2.X) return Q1.X < Q2.X;
 	if(Q1.W != Q2.W) return Q1.W < Q2.W;
 	return Q1.H >= Q2.H;
+}
+
+void AVoxelChunk::GenerateChunkMesh()
+{
+	for(int32 i = 0; i<Chunk.Voxels.Num(); i++)
+	{
+		Quad Q1(Chunk.Voxels[i]->GetVoxelPosition().X, Chunk.Voxels[i]->GetVoxelPosition().Y, 1, 1);
+		if(Chunk.Voxels[i]->bIsVisible)
+		{
+			UVoxel* Neighbor = Chunk.Voxels[i]->GetNeighbor(0);
+			if(Neighbor->bIsVisible)
+			{
+				Quad Q2(Neighbor->GetVoxelPosition().X, Neighbor->GetVoxelPosition().Y, 1, 1);
+				if(CompareQuad(Q1, Q2))
+				{
+					Q1.W += Q2.W;
+				};
+			} 
+		}
+	}
 }
 
 FIntVector AVoxelChunk::GetChunkPosition() const
