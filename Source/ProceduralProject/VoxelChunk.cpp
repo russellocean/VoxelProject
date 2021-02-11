@@ -68,6 +68,14 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 	return true;
 }
 
+bool AVoxelChunk::CompareQuad(const Quad& Q1, const Quad& Q2)
+{
+	if(Q1.Y != Q2.Y) return Q1.Y < Q2.Y;
+	if(Q1.X != Q2.X) return Q1.X < Q2.X;
+	if(Q1.W != Q2.W) return Q1.W < Q2.W;
+	return Q1.H >= Q2.H;
+}
+
 FIntVector AVoxelChunk::GetChunkPosition() const
 {
 	return Chunk.ChunkPosition;
@@ -85,7 +93,7 @@ void AVoxelChunk::AddVoxel(const FIntVector VoxelPosition)
 	Chunk.Voxels.Add(&Voxel);
 }
 
-void AVoxelChunk::RemoveVoxel(FIntVector Position)
+void AVoxelChunk::RemoveVoxel(FIntVector Position) const
 {
 	for(int32 i = 0; i < Chunk.Voxels.Num(); i++)
 	{

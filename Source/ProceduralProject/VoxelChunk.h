@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
+#include "Quad.h"
 
 #include "Voxel.h"
 #include "GameFramework/Actor.h"
@@ -28,7 +28,7 @@ struct FChunkData
 };
 
 UCLASS(BlueprintType)
-class PROCEDURALPROJECT_API AVoxelChunk : public AActor
+class PROCEDURALPROJECT_API AVoxelChunk final : public AActor
 {
 	GENERATED_BODY()
 protected:
@@ -45,10 +45,11 @@ public:
 	FIntVector GetChunkPosition() const;
 	void AddVoxel(UVoxel Voxel);
 	void AddVoxel(FIntVector VoxelPosition);
-	void RemoveVoxel(FIntVector Position);
+	void RemoveVoxel(FIntVector Position) const;
 	
 private:
 	bool CheckVoxelNeighbors(int32 VoxelIndex);
+	bool CompareQuad(const Quad &Q1, const Quad &Q2);
 
 	static const FIntVector NeighborOffsets[6];
 };
