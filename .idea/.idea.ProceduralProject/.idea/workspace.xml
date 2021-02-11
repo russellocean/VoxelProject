@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="81428b3d-d5e3-4351-a887-0689744375a7" name="Default Changelist" comment="Optimize neighbor checking by offsets.">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -264,7 +265,7 @@
       <workItem from="1613006085204" duration="1221000" />
       <workItem from="1613008476878" duration="466000" />
       <workItem from="1613008990529" duration="300000" />
-      <workItem from="1613056166063" duration="5110000" />
+      <workItem from="1613056166063" duration="8945000" />
     </task>
     <task id="LOCAL-00001" summary="Added CompareQuad function for greedy meshing">
       <created>1613057058206</created>
@@ -308,6 +309,15 @@
     <option name="LAST_COMMIT_MESSAGE" value="Optimize neighbor checking by offsets." />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp</url>
+          <line>58</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="CppProject">
         <watch expression="this-&gt;Chunk.Voxels[94]" />

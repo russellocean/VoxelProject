@@ -37,8 +37,8 @@ void AVoxelChunk::CreateChunk(FIntVector ChunkPosition)
 	}
 	for(int32 i = 0; i < Chunk.Voxels.Num(); i++)
 	{
-		UVoxel* CurrentVoxel = Chunk.Voxels[i];
-		FIntVector VoxelPosition = CurrentVoxel->GetVoxelPosition();
+		//UVoxel* CurrentVoxel = Chunk.Voxels[i];
+		//FIntVector VoxelPosition = CurrentVoxel->GetVoxelPosition();
 		Chunk.Voxels[i]->bIsVisible = CheckVoxelNeighbors(i);
 		UE_LOG(LogTemp,Warning,TEXT("Voxel Rendered? %s"), (Chunk.Voxels[i]->bIsVisible ? TEXT("True") : TEXT("False")));
 		if(Chunk.Voxels[i]->bIsVisible)
@@ -65,33 +65,51 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 	UVoxel* Voxel = Chunk.Voxels[VoxelIndex];
 	if(Chunk.Voxels.IsValidIndex(VoxelIndex+256))
 	{
-		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex+256], 0);
-		TotalNeighbors++;
+		if(Chunk.Voxels[VoxelIndex]->GetVoxelPosition().X +1 == Chunk.Voxels[VoxelIndex+256]->GetVoxelPosition().X)
+		{
+			Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex+256], 0);
+			TotalNeighbors++;
+		}
 	}
 	if(Chunk.Voxels.IsValidIndex(VoxelIndex-256))
 	{
-		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex-256], 1);
-		TotalNeighbors++;
+		if(Chunk.Voxels[VoxelIndex]->GetVoxelPosition().X -1 == Chunk.Voxels[VoxelIndex-256]->GetVoxelPosition().X)
+		{
+			Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex-256], 1);
+			TotalNeighbors++;
+		}
 	}
 	if(Chunk.Voxels.IsValidIndex(VoxelIndex+16))
 	{
-		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex+16], 2);
-		TotalNeighbors++;
+		if(Chunk.Voxels[VoxelIndex]->GetVoxelPosition().Y +1 == Chunk.Voxels[VoxelIndex+16]->GetVoxelPosition().Y)
+		{
+			Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex+16], 2);
+			TotalNeighbors++;
+		}
 	}
 	if(Chunk.Voxels.IsValidIndex(VoxelIndex-16))
 	{
-		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex-16], 3);
-		TotalNeighbors++;
+		if(Chunk.Voxels[VoxelIndex]->GetVoxelPosition().Y -1 == Chunk.Voxels[VoxelIndex-16]->GetVoxelPosition().Y)
+		{
+			Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex-16], 3);
+			TotalNeighbors++;
+		}
 	}
 	if(Chunk.Voxels.IsValidIndex(VoxelIndex+1))
 	{
-		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex+1], 4);
-		TotalNeighbors++;
+		if(Chunk.Voxels[VoxelIndex]->GetVoxelPosition().Z +1 == Chunk.Voxels[VoxelIndex+1]->GetVoxelPosition().Z)
+		{
+			Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex+1], 4);
+			TotalNeighbors++;
+		}
 	}
 	if(Chunk.Voxels.IsValidIndex(VoxelIndex-1))
 	{
-		Voxel->SetNeighbor(Chunk.Voxels[-1], 5);
-		TotalNeighbors++;
+		if(Chunk.Voxels[VoxelIndex]->GetVoxelPosition().Z -1 == Chunk.Voxels[VoxelIndex-1]->GetVoxelPosition().Z)
+		{
+			Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex-1], 5);
+			TotalNeighbors++;
+		}
 	}
 	if(TotalNeighbors == 6)
 	{
