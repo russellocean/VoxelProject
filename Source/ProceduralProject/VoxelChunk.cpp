@@ -37,38 +37,70 @@ void AVoxelChunk::CreateChunk(FIntVector ChunkPosition)
 	}
 	for(int32 i = 0; i < Chunk.Voxels.Num(); i++)
 	{
+		UVoxel* CurrentVoxel = Chunk.Voxels[i];
+		FIntVector VoxelPosition = CurrentVoxel->GetVoxelPosition();
 		Chunk.Voxels[i]->bIsVisible = CheckVoxelNeighbors(i);
 		UE_LOG(LogTemp,Warning,TEXT("Voxel Rendered? %s"), (Chunk.Voxels[i]->bIsVisible ? TEXT("True") : TEXT("False")));
 		if(Chunk.Voxels[i]->bIsVisible)
 		{
 			DrawDebugBox(GetWorld(), FVector(Chunk.Voxels[i]->GetVoxelPosition().X, Chunk.Voxels[i]->GetVoxelPosition().Y, Chunk.Voxels[i]->GetVoxelPosition().Z) * 100, FVector(50,50,50), FColor::Green, true, -1, 0, 4 );
 		}
+
+		/*if(Chunk.Voxels[i]->bIsVisible)
+		{
+			Quad Q1(VoxelPosition.X, VoxelPosition.Y, 1,1);
+			Quad Q2(VoxelPosition.X + 1, VoxelPosition.Y + 1, 1,1);
+			if(CompareQuad(Q1, Q2));
+			{
+				Q1.W += Q2.W;
+			}
+		}*/
 	}
+	
 }
 
 bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 {
 	int32 TotalNeighbors = 0;
 	UVoxel* Voxel = Chunk.Voxels[VoxelIndex];
-	for(int32 Direction = 0; Direction < 6; Direction++)
+	if(Chunk.Voxels.IsValidIndex(VoxelIndex+256))
 	{
-		for(int32 n = 0; n < Chunk.Voxels.Num(); n++)
-		{
-			if(Chunk.Voxels[n]->GetVoxelPosition() == Voxel->GetVoxelPosition() + NeighborOffsets[Direction])
-			{
-				Voxel->SetNeighbor(Chunk.Voxels[n], Direction);
-				TotalNeighbors++;
-				if(TotalNeighbors == 6)
-				{
-					return false; //Voxel should be culled
-				}
-			}
-		}
+		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex+256], 0);
+		TotalNeighbors++;
+	}
+	if(Chunk.Voxels.IsValidIndex(VoxelIndex-256))
+	{
+		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex-256], 1);
+		TotalNeighbors++;
+	}
+	if(Chunk.Voxels.IsValidIndex(VoxelIndex+16))
+	{
+		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex+16], 2);
+		TotalNeighbors++;
+	}
+	if(Chunk.Voxels.IsValidIndex(VoxelIndex-16))
+	{
+		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex-16], 3);
+		TotalNeighbors++;
+	}
+	if(Chunk.Voxels.IsValidIndex(VoxelIndex+1))
+	{
+		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex+1], 4);
+		TotalNeighbors++;
+	}
+	if(Chunk.Voxels.IsValidIndex(VoxelIndex-1))
+	{
+		Voxel->SetNeighbor(Chunk.Voxels[-1], 5);
+		TotalNeighbors++;
+	}
+	if(TotalNeighbors == 6)
+	{
+		return false; //Voxel should be culled
 	}
 	return true;
 }
 
-bool AVoxelChunk::CompareQuad(const Quad& Q1, const Quad& Q2)
+bool AVoxelChunk::CompareQuad(Quad& Q1, Quad& Q2)
 {
 	if(Q1.Y != Q2.Y) return Q1.Y < Q2.Y;
 	if(Q1.X != Q2.X) return Q1.X < Q2.X;

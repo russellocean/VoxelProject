@@ -29,8 +29,6 @@ public:
 	FIntVector GetVoxelPosition() const;
 	void SetNeighbor(UVoxel* NeighborVoxel, int32 Direction);
 	UVoxel* GetNeighbor(int32 Direction);
-	
-	bool CompareQuad((const int xPos0, const int ));
 
 	bool bIsVisible;
 };

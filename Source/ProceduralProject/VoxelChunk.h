@@ -40,7 +40,7 @@ protected:
 public:
 	AVoxelChunk();
 	virtual void Tick(float DeltaTime) override;
-
+	
 	void CreateChunk(FIntVector ChunkPosition);
 	FIntVector GetChunkPosition() const;
 	void AddVoxel(UVoxel Voxel);
@@ -49,7 +49,7 @@ public:
 	
 private:
 	bool CheckVoxelNeighbors(int32 VoxelIndex);
-	bool CompareQuad(const Quad &Q1, const Quad &Q2);
+	bool CompareQuad(Quad &Q1, Quad &Q2);
 
 	static const FIntVector NeighborOffsets[6];
 };
