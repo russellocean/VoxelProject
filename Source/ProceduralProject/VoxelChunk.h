@@ -1,6 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "Quad.h"
@@ -20,8 +18,9 @@ struct FChunkData
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Chunk)
 	int32 ChunkID;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Chunk)
-	int32 ChunkSize = 16;
+	const int32 ChunkSize = 16;
+	const int32 ChunkSizeSquared = 256;
+	const int32 ChunkSizeCubed = 4096;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Chunk)
 	TArray<UVoxel*> Voxels;
@@ -43,14 +42,12 @@ public:
 	
 	void CreateChunk(FIntVector ChunkPosition);
 	FIntVector GetChunkPosition() const;
+	
 	void AddVoxel(UVoxel Voxel);
-	void AddVoxel(FIntVector VoxelPosition);
-	void RemoveVoxel(FIntVector Position) const;
 	
 private:
 	bool CheckVoxelNeighbors(int32 VoxelIndex);
-	bool CompareQuad(Quad &Q1, Quad &Q2);
-	void GenerateChunkMesh();
+	static bool CompareQuad(FQuad &Q1, FQuad &Q2);
 
 	static const FIntVector NeighborOffsets[6];
 };

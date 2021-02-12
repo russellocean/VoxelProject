@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-struct Quad
+struct FQuad
 { // X pos, Y pos, Width, Height
-	Quad(int X, int Y, int W, int H) : X{X}, Y{Y}, W{W}, H{H}
+	FQuad(const int X, const int Y, const int W, const int H) : X{X}, Y{Y}, W{W}, H{H}
 	{
 		this->X = X;
 		this->Y = Y;

@@ -6,6 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="81428b3d-d5e3-4351-a887-0689744375a7" name="Default Changelist" comment="Optimize neighbor checking by offsets.">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/Quad.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/Quad.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/Voxel.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/Voxel.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/Voxel.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/Voxel.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.h" afterDir="false" />
     </list>
@@ -51,11 +54,11 @@
       <option value="$PROJECT_DIR$/Source/ProceduralProject/Worker/VoxelTerrainWorker.cpp" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/Component/Voxel.h" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/USt.h" />
-      <option value="$PROJECT_DIR$/Source/ProceduralProject/Voxel.h" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/Quad.h" />
-      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.h" />
+      <option value="$PROJECT_DIR$/Source/ProceduralProject/Voxel.h" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/Voxel.cpp" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" />
+      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.h" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1n7KwbufR5thYJA67wdYFfCp8yg" />
@@ -266,7 +269,8 @@
       <workItem from="1613006085204" duration="1221000" />
       <workItem from="1613008476878" duration="466000" />
       <workItem from="1613008990529" duration="300000" />
-      <workItem from="1613056166063" duration="11158000" />
+      <workItem from="1613056166063" duration="11398000" />
+      <workItem from="1613142422168" duration="2830000" />
     </task>
     <task id="LOCAL-00001" summary="Added CompareQuad function for greedy meshing">
       <created>1613057058206</created>

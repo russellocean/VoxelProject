@@ -15,6 +15,9 @@ struct FVoxelData
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Voxel)
 	int32 VoxelID;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Voxel)
+	bool bIsVisible;
 };
 UCLASS()
 class PROCEDURALPROJECT_API UVoxel final : public UObject
@@ -22,13 +25,13 @@ class PROCEDURALPROJECT_API UVoxel final : public UObject
 	GENERATED_BODY()
 	FVoxelData Voxel;
 
-	UVoxel* Neighbors[6];
+	UVoxel* Neighbors[6] = {nullptr}; 
 
 public:
 	void SetVoxelPosition(FIntVector Position);
 	FIntVector GetVoxelPosition() const;
 	void SetNeighbor(UVoxel* NeighborVoxel, int32 Direction);
 	UVoxel* GetNeighbor(int32 Direction);
-
-	bool bIsVisible;
+	bool IsVisible() const;
+	void SetVisibility(bool Visibility);
 };

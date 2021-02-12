@@ -37,16 +37,14 @@ void AVoxelChunk::CreateChunk(FIntVector ChunkPosition)
 	}
 	for(int32 i = 0; i < Chunk.Voxels.Num(); i++)
 	{
-		Chunk.Voxels[i]->bIsVisible = CheckVoxelNeighbors(i);
-		UE_LOG(LogTemp,Warning,TEXT("Voxel Rendered? %s"), (Chunk.Voxels[i]->bIsVisible ? TEXT("True") : TEXT("False")));
-		if(Chunk.Voxels[i]->bIsVisible)
+		Chunk.Voxels[i]->SetVisibility(CheckVoxelNeighbors(i));
+		UE_LOG(LogTemp,Warning,TEXT("Voxel Rendered? %s"), (Chunk.Voxels[i]->IsVisible() ? TEXT("True") : TEXT("False")));
+		if(Chunk.Voxels[i]->IsVisible())
 		{
 			DrawDebugBox(GetWorld(), FVector(Chunk.Voxels[i]->GetVoxelPosition().X, Chunk.Voxels[i]->GetVoxelPosition().Y, Chunk.Voxels[i]->GetVoxelPosition().Z) * 100, FVector(50,50,50), FColor::Green, true, -1, 0, 4 );
 		}
 	}
 }
-
-
 
 bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 {
@@ -107,32 +105,12 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 	return true;
 }
 
-bool AVoxelChunk::CompareQuad(Quad& Q1, Quad& Q2)
+bool AVoxelChunk::CompareQuad(FQuad& Q1, FQuad& Q2)
 {
 	if(Q1.Y != Q2.Y) return Q1.Y < Q2.Y;
 	if(Q1.X != Q2.X) return Q1.X < Q2.X;
 	if(Q1.W != Q2.W) return Q1.W < Q2.W;
 	return Q1.H >= Q2.H;
-}
-
-void AVoxelChunk::GenerateChunkMesh()
-{
-	for(int32 i = 0; i<Chunk.Voxels.Num(); i++)
-	{
-		Quad Q1(Chunk.Voxels[i]->GetVoxelPosition().X, Chunk.Voxels[i]->GetVoxelPosition().Y, 1, 1);
-		if(Chunk.Voxels[i]->bIsVisible)
-		{
-			UVoxel* Neighbor = Chunk.Voxels[i]->GetNeighbor(0);
-			if(Neighbor->bIsVisible)
-			{
-				Quad Q2(Neighbor->GetVoxelPosition().X, Neighbor->GetVoxelPosition().Y, 1, 1);
-				if(CompareQuad(Q1, Q2))
-				{
-					Q1.W += Q2.W;
-				};
-			} 
-		}
-	}
 }
 
 FIntVector AVoxelChunk::GetChunkPosition() const
@@ -143,24 +121,6 @@ FIntVector AVoxelChunk::GetChunkPosition() const
 void AVoxelChunk::AddVoxel(UVoxel Voxel)
 {
 	Chunk.Voxels.Add(&Voxel);
-}
-
-void AVoxelChunk::AddVoxel(const FIntVector VoxelPosition)
-{
-	UVoxel Voxel;
-	Voxel.SetVoxelPosition(VoxelPosition);
-	Chunk.Voxels.Add(&Voxel);
-}
-
-void AVoxelChunk::RemoveVoxel(FIntVector Position) const
-{
-	for(int32 i = 0; i < Chunk.Voxels.Num(); i++)
-	{
-		/*if(Chunk.Voxels[i].GetVoxelPosition() == Position)
-		{
-			//Remove voxel from Chunk.Voxels[i] and rebuild chunk.
-		}*/
-	}
 }
 
 const FIntVector AVoxelChunk::NeighborOffsets[] {
