@@ -563,6 +563,8 @@
       <e p="ProceduralProject.uproject" t="Include" />
       <e p="Source" t="Include">
         <e p="ProceduralProject" t="Include">
+          <e p="ChunkMesher.cpp" t="Include" />
+          <e p="ChunkMesher.h" t="Include" />
           <e p="Component" t="Include">
             <e p="VoxelGenerator.cpp" t="Include" />
             <e p="VoxelGenerator.h" t="Include" />

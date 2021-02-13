@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
+
+#include "ChunkMesher.h"
 #include "Quad.h"
 
 #include "Voxel.h"
@@ -18,9 +20,9 @@ struct FChunkData
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Chunk)
 	int32 ChunkID;
 
-	const int32 ChunkSize = 16;
-	const int32 ChunkSizeSquared = 256;
-	const int32 ChunkSizeCubed = 4096;
+	int32 ChunkSize = 16;
+	int32 ChunkSizeSquared = 256;
+	int32 ChunkSizeCubed = 4096;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Chunk)
 	TArray<UVoxel*> Voxels;
@@ -35,6 +37,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Chunk)
 	FChunkData Chunk;
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
+	UChunkMesher* ChunkMesh;
 
 public:
 	AVoxelChunk();

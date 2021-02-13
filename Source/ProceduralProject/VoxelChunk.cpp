@@ -4,6 +4,9 @@
 
 AVoxelChunk::AVoxelChunk()
 {
+	ChunkMesh = CreateDefaultSubobject<UChunkMesher>("Chunk Mesh");
+	SetRootComponent(ChunkMesh);
+	ChunkMesh->bUseAsyncCooking = true;
 }
 
 void AVoxelChunk::BeginPlay()
@@ -38,12 +41,13 @@ void AVoxelChunk::CreateChunk(FIntVector ChunkPosition)
 	for(int32 i = 0; i < Chunk.Voxels.Num(); i++)
 	{
 		Chunk.Voxels[i]->SetVisibility(CheckVoxelNeighbors(i));
-		UE_LOG(LogTemp,Warning,TEXT("Voxel Rendered? %s"), (Chunk.Voxels[i]->IsVisible() ? TEXT("True") : TEXT("False")));
-		if(Chunk.Voxels[i]->IsVisible())
+		//UE_LOG(LogTemp,Warning,TEXT("Voxel Rendered? %s"), (Chunk.Voxels[i]->IsVisible() ? TEXT("True") : TEXT("False")));
+		/*if(Chunk.Voxels[i]->IsVisible())
 		{
 			DrawDebugBox(GetWorld(), FVector(Chunk.Voxels[i]->GetVoxelPosition().X, Chunk.Voxels[i]->GetVoxelPosition().Y, Chunk.Voxels[i]->GetVoxelPosition().Z) * 100, FVector(50,50,50), FColor::Green, true, -1, 0, 4 );
-		}
+		}*/
 	}
+	ChunkMesh->ChunkToQuads(Chunk.Voxels);
 }
 
 bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)

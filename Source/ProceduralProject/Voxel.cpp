@@ -29,3 +29,38 @@ void UVoxel::SetVisibility(const bool Visibility)
 {
 	Voxel.bIsVisible = Visibility;
 }
+
+void UVoxel::GenerateQuads()
+{
+	/*for(int32 n = 0; n < 6 ; n++)
+	{
+		if(Neighbors[n] == nullptr)
+		{
+			switch(n)
+			{
+				case(0): {
+					FQuad* Q1 = FQuad {1, 1, 1, 1};
+					Quads[n] = Q1;
+				}
+				case(1): {
+											
+				}
+				case(2): {
+											
+				}
+				case(3): {
+												
+				}
+				case(4): {
+												
+				}
+				case(5): {
+												
+				}
+				default: {
+						return;
+				}
+			}	
+		}
+	}*/
+}
