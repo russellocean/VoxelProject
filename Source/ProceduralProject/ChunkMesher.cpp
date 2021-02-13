@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "ChunkMesher.h"
 
 void UChunkMesher::ChunkToQuads(TArray<UVoxel*> Voxels)
@@ -8,19 +5,19 @@ void UChunkMesher::ChunkToQuads(TArray<UVoxel*> Voxels)
 	int32 SectionIndex = 0;
 	for(int v = 0; v < Voxels.Num(); v++)
 	{
-		FVector VertexOffset = FVector(Voxels[v]->GetVoxelPosition()) * 100;
-		Vertices.Add(FVector(-50, -50, -50) + VertexOffset); //lower left - 0
-		Vertices.Add(FVector(-50, -50, 50) + VertexOffset); //upper left - 1
-		Vertices.Add(FVector(-50, 50, -50) + VertexOffset); //lower right - 2 
-		Vertices.Add(FVector(-50, 50, 50) + VertexOffset); //upper right - 3
-	
-		Vertices.Add(FVector(50, -50, -50) + VertexOffset); //lower front left - 4
-		Vertices.Add(FVector(50, -50, 50) + VertexOffset); //upper front left - 5
-
-		Vertices.Add(FVector(50, 50, 50) + VertexOffset); //upper front right - 6
-		Vertices.Add(FVector(50, 50, -50) + VertexOffset); //lower front right - 7
 		if(Voxels[v]->IsVisible())
 		{
+			FVector VertexOffset = FVector(Voxels[v]->GetVoxelPosition()) * 100;
+			Vertices.Add(FVector(-50, -50, -50) + VertexOffset); //lower left - 0
+			Vertices.Add(FVector(-50, -50, 50) + VertexOffset); //upper left - 1
+			Vertices.Add(FVector(-50, 50, -50) + VertexOffset); //lower right - 2 
+			Vertices.Add(FVector(-50, 50, 50) + VertexOffset); //upper right - 3
+	
+			Vertices.Add(FVector(50, -50, -50) + VertexOffset); //lower front left - 4
+			Vertices.Add(FVector(50, -50, 50) + VertexOffset); //upper front left - 5
+
+			Vertices.Add(FVector(50, 50, 50) + VertexOffset); //upper front right - 6
+			Vertices.Add(FVector(50, 50, -50) + VertexOffset); //lower front right - 7
 			for(int n = 0; n < 6; n++)
 			{
 				if(Voxels[v]->GetNeighbor(n) == nullptr)
@@ -58,24 +55,25 @@ void UChunkMesher::ChunkToQuads(TArray<UVoxel*> Voxels)
 							AddTriangle(4, 7, 2);
 						} break;
 					}
-					SectionIndex++;
 				}
-
-				TArray<FLinearColor> VertexColors;
-				VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
-				VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
-				VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
-				VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
-				VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
-				VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
-				VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
-				VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
-
-				CreateMeshSection_LinearColor(SectionIndex, Vertices, Triangles, TArray<FVector>(), TArray<FVector2D>(), VertexColors, TArray<FProcMeshTangent>(),true);
 			}
+
+			TArray<FLinearColor> VertexColors;
+			VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
+			VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
+			VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
+			VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
+			VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
+			VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
+			VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
+			VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
+
+			SectionIndex++;
+
+			CreateMeshSection_LinearColor(SectionIndex, Vertices, Triangles, TArray<FVector>(), TArray<FVector2D>(), VertexColors, TArray<FProcMeshTangent>(),true);
+			Vertices.Empty();
+			Triangles.Empty();
 		}
-		Vertices.Empty();
-		Triangles.Empty();
 	}
 }
 

@@ -48,6 +48,7 @@ void AVoxelChunk::CreateChunk(FIntVector ChunkPosition)
 		}*/
 	}
 	ChunkMesh->ChunkToQuads(Chunk.Voxels);
+	
 }
 
 bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
