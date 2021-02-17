@@ -2,8 +2,6 @@
 
 #include "CoreMinimal.h"
 
-
-#include "Quad.h"
 #include "UObject/Object.h"
 #include "Voxel.generated.h"
 
@@ -27,6 +25,7 @@ class PROCEDURALPROJECT_API UVoxel final : public UObject
 	GENERATED_BODY()
 	FVoxelData Voxel;
 
+	//References all neighbors. Maybe should move this into VoxelData?
 	UVoxel* Neighbors[6] = {nullptr};
 
 public:

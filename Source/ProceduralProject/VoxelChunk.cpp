@@ -19,7 +19,6 @@ void AVoxelChunk::Initialize(const FIntVector ChunkCoords)
 	}
 }
 
-
 void AVoxelChunk::BeginPlay()
 {
 	Super::BeginPlay();
@@ -30,6 +29,7 @@ void AVoxelChunk::BeginPlay()
 void AVoxelChunk::CreateChunk(const FIntVector ChunkPosition)
 {
 	int32 Index = 0;
+	//Loop through all axis in the chunk by Chunk size and create a new voxel there. Add to our chunk array.
 	for(int32 i = 0; i < Chunk.ChunkSize; i++)
 	{
 		for(int32 j = 0; j < Chunk.ChunkSize; j++)
@@ -52,6 +52,7 @@ void AVoxelChunk::CreateChunk(const FIntVector ChunkPosition)
 	ChunkMesh->ChunkToQuads(Chunk.Voxels);
 }
 
+//I really dont like the check system here TODO find another method to detect neighbors
 bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 {
 	int32 TotalNeighbors = 0;

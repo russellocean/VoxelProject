@@ -6,17 +6,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="81428b3d-d5e3-4351-a887-0689744375a7" name="Default Changelist" comment="Optimize neighbor checking by offsets.">
-      <change afterPath="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/FirstPersonCPP/Maps/FirstPersonExampleMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/FirstPersonCPP/Maps/FirstPersonExampleMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Materials/Grass.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Materials/Grass.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/Component/VoxelGenerator.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/Component/VoxelGenerator.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/Voxel.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/Voxel.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,15 +56,15 @@
       <option value="$PROJECT_DIR$/Source/ProceduralProject/Component/Voxel.h" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/USt.h" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/Quad.h" />
-      <option value="$PROJECT_DIR$/Source/ProceduralProject/Voxel.cpp" />
-      <option value="$PROJECT_DIR$/Source/ProceduralProject/Voxel.h" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/Component/VoxelGenerator.cpp" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.h" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.cpp" />
-      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.cpp" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.h" />
-      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" />
+      <option value="$PROJECT_DIR$/Source/ProceduralProject/Voxel.cpp" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.h" />
+      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.cpp" />
+      <option value="$PROJECT_DIR$/Source/ProceduralProject/Voxel.h" />
+      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1n7KwbufR5thYJA67wdYFfCp8yg" />
@@ -393,7 +387,8 @@
       <workItem from="1613151765051" duration="4046000" />
       <workItem from="1613232463134" duration="7529000" />
       <workItem from="1613509244283" duration="3091000" />
-      <workItem from="1613575812143" duration="7589000" />
+      <workItem from="1613575812143" duration="7810000" />
+      <workItem from="1613594784541" duration="735000" />
     </task>
     <task id="LOCAL-00001" summary="Added CompareQuad function for greedy meshing">
       <created>1613057058206</created>

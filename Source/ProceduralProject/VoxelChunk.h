@@ -3,7 +3,6 @@
 #include "CoreMinimal.h"
 
 #include "ChunkMesher.h"
-#include "Quad.h"
 
 #include "Voxel.h"
 #include "GameFramework/Actor.h"
@@ -17,6 +16,7 @@ struct FChunkData
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Chunk)
 	FIntVector ChunkPosition;
 
+	//Dont like storing this, must be a better way to detect first time generation, maybe check if already written to disk?
 	bool IsNewChunk = true;
 
 	int32 ChunkSize = 16;
@@ -43,6 +43,7 @@ protected:
 public:
 	AVoxelChunk();
 
+	//Must be called after voxel constructed
 	void Initialize(FIntVector ChunkCoords);
 	
 	void CreateChunk(const FIntVector ChunkPosition);
