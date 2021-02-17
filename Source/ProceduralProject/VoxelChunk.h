@@ -17,8 +17,7 @@ struct FChunkData
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Chunk)
 	FIntVector ChunkPosition;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Chunk)
-	int32 ChunkID;
+	bool IsNewChunk = true;
 
 	int32 ChunkSize = 16;
 	int32 ChunkSizeSquared = 256;
@@ -43,16 +42,16 @@ protected:
 
 public:
 	AVoxelChunk();
-	virtual void Tick(float DeltaTime) override;
+
+	void Initialize(FIntVector ChunkCoords);
 	
-	void CreateChunk(FIntVector ChunkPosition);
+	void CreateChunk(const FIntVector ChunkPosition);
 	FIntVector GetChunkPosition() const;
 	
 	void AddVoxel(UVoxel Voxel);
 	
 private:
 	bool CheckVoxelNeighbors(int32 VoxelIndex);
-	static bool CompareQuad(FQuad &Q1, FQuad &Q2);
 
 	static const FIntVector NeighborOffsets[6];
 };

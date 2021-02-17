@@ -64,6 +64,8 @@
           <e p="Voxel.h" t="Include" />
           <e p="VoxelChunk.cpp" t="Include" />
           <e p="VoxelChunk.h" t="Include" />
+          <e p="VoxelTerrain.cpp" t="Include" />
+          <e p="VoxelTerrain.h" t="Include" />
         </e>
         <e p="ProceduralProject.Target.cs" t="Include" />
         <e p="ProceduralProjectEditor.Target.cs" t="Include" />

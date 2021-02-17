@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "VoxelGenerator.h"
 
 void UVoxelGenerator::GenerateVoxel(FIntVector VoxelCoords, int32 VoxelIndex)

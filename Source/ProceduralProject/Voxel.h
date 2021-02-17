@@ -28,7 +28,6 @@ class PROCEDURALPROJECT_API UVoxel final : public UObject
 	FVoxelData Voxel;
 
 	UVoxel* Neighbors[6] = {nullptr};
-	//FQuad* Quads[6] = {nullptr};
 
 public:
 	void SetVoxelPosition(FIntVector Position);
@@ -37,6 +36,4 @@ public:
 	UVoxel* GetNeighbor(int32 Direction);
 	bool IsVisible() const;
 	void SetVisibility(bool Visibility);
-
-	void GenerateQuads();
 };

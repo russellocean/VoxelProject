@@ -16,12 +16,18 @@ class PROCEDURALPROJECT_API UChunkMesher : public UProceduralMeshComponent
 	public:
 	void ChunkToQuads(TArray<UVoxel*> Voxels);
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UMaterial* VoxelMaterial;
+
 	private:
 	/* The vertices of the mesh */
 	TArray<FVector> Vertices;
  
 	/* The triangles of the mesh */
 	TArray<int32> Triangles;
+
+	TArray<FLinearColor> VertexColors;
+	TArray<FVector2D> UVs;
 
 	/* Creates a triangle that connects the given vertices */
 	void AddTriangle(int32 V1, int32 V2, int32 V3);
