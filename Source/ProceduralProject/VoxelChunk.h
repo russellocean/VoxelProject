@@ -19,9 +19,9 @@ struct FChunkData
 	//Dont like storing this, must be a better way to detect first time generation, maybe check if already written to disk?
 	bool IsNewChunk = true;
 
-	int32 ChunkSize = 16;
-	int32 ChunkSizeSquared = 256;
-	int32 ChunkSizeCubed = 4096;
+	static const int32 ChunkSize = 16;
+	static const int32 ChunkSizeSquared = 256;
+	static const int32 ChunkSizeCubed = 4096;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Chunk)
 	TArray<UVoxel*> Voxels;
@@ -45,13 +45,13 @@ public:
 
 	//Must be called after voxel constructed
 	void Initialize(FIntVector ChunkCoords);
-	
-	void CreateChunk(const FIntVector ChunkPosition);
+
 	FIntVector GetChunkPosition() const;
-	
+
 	void AddVoxel(UVoxel Voxel);
-	
+
 private:
+	void CreateChunk(const FIntVector ChunkPosition);
 	bool CheckVoxelNeighbors(int32 VoxelIndex);
 
 	static const FIntVector NeighborOffsets[6];

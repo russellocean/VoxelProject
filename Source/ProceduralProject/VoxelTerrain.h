@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
 #include "VoxelTerrain.generated.h"
 
 UCLASS()
@@ -16,7 +17,7 @@ public:
 	AVoxelTerrain();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Chunk)
-	int32 RenderDistance {6};
+	int32 RenderDistance{6};
 
 protected:
 	// Called when the game starts or when spawned

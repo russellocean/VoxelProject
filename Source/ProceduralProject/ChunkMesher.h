@@ -13,16 +13,16 @@ class PROCEDURALPROJECT_API UChunkMesher : public UProceduralMeshComponent
 {
 	GENERATED_BODY()
 
-	public:
+public:
 	void ChunkToQuads(TArray<UVoxel*> Voxels);
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UMaterial* VoxelMaterial;
 
-	private:
+private:
 	/* The vertices of the mesh */
 	TArray<FVector> Vertices;
- 
+
 	/* The triangles of the mesh */
 	TArray<int32> Triangles;
 

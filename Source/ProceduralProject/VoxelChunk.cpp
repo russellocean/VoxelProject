@@ -9,11 +9,12 @@ AVoxelChunk::AVoxelChunk()
 
 void AVoxelChunk::Initialize(const FIntVector ChunkCoords)
 {
-	if(Chunk.IsNewChunk)
+	if (Chunk.IsNewChunk)
 	{
 		CreateChunk(FIntVector(ChunkCoords));
 		Chunk.IsNewChunk = false;
-	} else
+	}
+	else
 	{
 		// Load chunk from disk
 	}
@@ -30,22 +31,27 @@ void AVoxelChunk::CreateChunk(const FIntVector ChunkPosition)
 {
 	int32 Index = 0;
 	//Loop through all axis in the chunk by Chunk size and create a new voxel there. Add to our chunk array.
-	for(int32 i = 0; i < Chunk.ChunkSize; i++)
+	for (int32 i = 0; i < Chunk.ChunkSize; i++)
 	{
-		for(int32 j = 0; j < Chunk.ChunkSize; j++)
+		for (int32 j = 0; j < Chunk.ChunkSize; j++)
 		{
 			for (int32 k = 0; k < Chunk.ChunkSize; k++)
 			{
 				UVoxel* Voxel;
 				Voxel = NewObject<UVoxel>();
-				const FIntVector VoxelPosition = FIntVector{i + (Chunk.ChunkSize * ChunkPosition.X),j + (Chunk.ChunkSize * ChunkPosition.Y),k + (Chunk.ChunkSize * ChunkPosition.Z)};
+				const FIntVector VoxelPosition = FIntVector{
+					i + (Chunk.ChunkSize * ChunkPosition.X),
+					j + (Chunk.ChunkSize * ChunkPosition.Y),
+					k + (Chunk.ChunkSize * ChunkPosition.Z)
+				};
+				Voxel->SetVoxelID(Index);
 				Voxel->SetVoxelPosition(VoxelPosition);
 				Chunk.Voxels.Add(Voxel);
 				Index++;
 			}
 		}
 	}
-	for(int32 i = 0; i < Chunk.Voxels.Num(); i++)
+	for (int32 i = 0; i < Chunk.Voxels.Num(); i++)
 	{
 		Chunk.Voxels[i]->SetVisibility(CheckVoxelNeighbors(i));
 	}
@@ -57,55 +63,43 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 {
 	int32 TotalNeighbors = 0;
 	UVoxel* Voxel = Chunk.Voxels[VoxelIndex];
-	if(Chunk.Voxels.IsValidIndex(VoxelIndex+256))
-	{
-		if(Chunk.Voxels[VoxelIndex]->GetVoxelPosition().X +1 == Chunk.Voxels[VoxelIndex+256]->GetVoxelPosition().X)
+	if (Chunk.Voxels.IsValidIndex(VoxelIndex + Chunk.ChunkSizeCubed) &&
+		Chunk.Voxels[VoxelIndex]->GetVoxelPosition().X + 1 == Chunk.Voxels[VoxelIndex + Chunk.ChunkSizeCubed]->GetVoxelPosition().X)
 		{
-			Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex+256], 0);
+			Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex + Chunk.ChunkSizeCubed], 0);
 			TotalNeighbors++;
 		}
-	}
-	if(Chunk.Voxels.IsValidIndex(VoxelIndex-256))
-	{
-		if(Chunk.Voxels[VoxelIndex]->GetVoxelPosition().X -1 == Chunk.Voxels[VoxelIndex-256]->GetVoxelPosition().X)
+	if (Chunk.Voxels.IsValidIndex(VoxelIndex - Chunk.ChunkSizeCubed) &&
+		Chunk.Voxels[VoxelIndex]->GetVoxelPosition().X - 1 == Chunk.Voxels[VoxelIndex - Chunk.ChunkSizeCubed]->GetVoxelPosition().X)
 		{
-			Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex-256], 1);
+			Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex - Chunk.ChunkSizeCubed], 1);
 			TotalNeighbors++;
 		}
-	}
-	if(Chunk.Voxels.IsValidIndex(VoxelIndex+16))
-	{
-		if(Chunk.Voxels[VoxelIndex]->GetVoxelPosition().Y +1 == Chunk.Voxels[VoxelIndex+16]->GetVoxelPosition().Y)
+	if (Chunk.Voxels.IsValidIndex(VoxelIndex + Chunk.ChunkSizeSquared) &&
+		Chunk.Voxels[VoxelIndex]->GetVoxelPosition().Y + 1 == Chunk.Voxels[VoxelIndex + Chunk.ChunkSizeSquared]->GetVoxelPosition().Y)
 		{
-			Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex+16], 2);
+		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex + Chunk.ChunkSizeSquared], 2);
+		TotalNeighbors++;
+		}
+	if (Chunk.Voxels.IsValidIndex(VoxelIndex - Chunk.ChunkSizeSquared) &&
+		Chunk.Voxels[VoxelIndex]->GetVoxelPosition().Y - 1 == Chunk.Voxels[VoxelIndex - Chunk.ChunkSizeSquared]->GetVoxelPosition().Y)
+		{
+			Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex - Chunk.ChunkSizeSquared], 3);
 			TotalNeighbors++;
 		}
-	}
-	if(Chunk.Voxels.IsValidIndex(VoxelIndex-16))
-	{
-		if(Chunk.Voxels[VoxelIndex]->GetVoxelPosition().Y -1 == Chunk.Voxels[VoxelIndex-16]->GetVoxelPosition().Y)
+	if (Chunk.Voxels.IsValidIndex(VoxelIndex + 1) &&
+		Chunk.Voxels[VoxelIndex]->GetVoxelPosition().Z + 1 == Chunk.Voxels[VoxelIndex + 1]->GetVoxelPosition().Z)
 		{
-			Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex-16], 3);
+			Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex + 1], 4);
 			TotalNeighbors++;
 		}
-	}
-	if(Chunk.Voxels.IsValidIndex(VoxelIndex+1))
-	{
-		if(Chunk.Voxels[VoxelIndex]->GetVoxelPosition().Z +1 == Chunk.Voxels[VoxelIndex+1]->GetVoxelPosition().Z)
+	if (Chunk.Voxels.IsValidIndex(VoxelIndex - 1) &&
+		Chunk.Voxels[VoxelIndex]->GetVoxelPosition().Z - 1 == Chunk.Voxels[VoxelIndex - 1]->GetVoxelPosition().Z)
 		{
-			Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex+1], 4);
+			Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex - 1], 5);
 			TotalNeighbors++;
 		}
-	}
-	if(Chunk.Voxels.IsValidIndex(VoxelIndex-1))
-	{
-		if(Chunk.Voxels[VoxelIndex]->GetVoxelPosition().Z -1 == Chunk.Voxels[VoxelIndex-1]->GetVoxelPosition().Z)
-		{
-			Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex-1], 5);
-			TotalNeighbors++;
-		}
-	}
-	if(TotalNeighbors == 6)
+	if (TotalNeighbors == 6)
 	{
 		return false; //Voxel should be culled
 	}
@@ -122,11 +116,11 @@ void AVoxelChunk::AddVoxel(UVoxel Voxel)
 	Chunk.Voxels.Add(&Voxel);
 }
 
-const FIntVector AVoxelChunk::NeighborOffsets[] {
-	FIntVector(1,0,0),
-	FIntVector(-1,0,0),
-	FIntVector(0,1,0),
-	FIntVector(0,-1,0),
-	FIntVector(0,0,1),
-	FIntVector(0,0,-1)
+const FIntVector AVoxelChunk::NeighborOffsets[]{
+	FIntVector(1, 0, 0),
+	FIntVector(-1, 0, 0),
+	FIntVector(0, 1, 0),
+	FIntVector(0, -1, 0),
+	FIntVector(0, 0, 1),
+	FIntVector(0, 0, -1)
 };

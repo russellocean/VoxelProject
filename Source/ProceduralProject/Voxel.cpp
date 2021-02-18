@@ -20,6 +20,16 @@ UVoxel* UVoxel::GetNeighbor(const int32 Direction)
 	return Neighbors[Direction];
 }
 
+void UVoxel::SetVoxelID(const int32 VoxelID)
+{
+	Voxel.VoxelID = VoxelID;
+}
+
+int32 UVoxel::GetVoxelID() const
+{
+	return Voxel.VoxelID;
+}
+
 bool UVoxel::IsVisible() const
 {
 	return Voxel.bIsVisible;

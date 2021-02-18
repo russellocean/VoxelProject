@@ -1,7 +1,5 @@
 ﻿#include "VoxelTerrain.h"
-
 #include "VoxelChunk.h"
-
 
 // Sets default values
 AVoxelTerrain::AVoxelTerrain()
@@ -15,12 +13,12 @@ void AVoxelTerrain::BeginPlay()
 {
 	Super::BeginPlay();
 
-	for(int32 x = 0; x < RenderDistance; x++)
+	for (int32 x = 0; x < RenderDistance; x++)
 	{
-		for(int32 y = 0; y < RenderDistance; y++)
+		for (int32 y = 0; y < RenderDistance; y++)
 		{
 			AVoxelChunk* Chunk = static_cast<AVoxelChunk*>(GetWorld()->SpawnActor(AVoxelChunk::StaticClass()));
-			Chunk->Initialize(FIntVector(x,y,0));
+			Chunk->Initialize(FIntVector(x, y, 0));
 		}
 	}
 }
@@ -30,4 +28,3 @@ void AVoxelTerrain::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
-
