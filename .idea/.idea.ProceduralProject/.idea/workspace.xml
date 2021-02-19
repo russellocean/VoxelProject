@@ -5,14 +5,7 @@
     <projectFile>Intermediate/ProjectFiles/UE4.vcxproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="81428b3d-d5e3-4351-a887-0689744375a7" name="Default Changelist" comment="Optimize neighbor checking by offsets.">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Materials/Grass.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Materials/Grass.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.h" afterDir="false" />
-    </list>
+    <list default="true" id="81428b3d-d5e3-4351-a887-0689744375a7" name="Default Changelist" comment="Optimize neighbor checking by offsets." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -398,7 +391,7 @@
       <workItem from="1613666433150" duration="6027000" />
       <workItem from="1613684759093" duration="11298000" />
       <workItem from="1613747027593" duration="6414000" />
-      <workItem from="1613756334199" duration="3421000" />
+      <workItem from="1613756334199" duration="3794000" />
     </task>
     <task id="LOCAL-00001" summary="Added CompareQuad function for greedy meshing">
       <created>1613057058206</created>
