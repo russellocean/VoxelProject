@@ -16,6 +16,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Chunk)
 	int32 RenderDistance{6};
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UMaterial* VoxelMaterial;
+
 protected:
 	virtual void BeginPlay() override;
 

@@ -7,7 +7,11 @@
   <component name="ChangeListManager">
     <list default="true" id="81428b3d-d5e3-4351-a887-0689744375a7" name="Default Changelist" comment="Optimize neighbor checking by offsets.">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Materials/Grass.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Materials/Grass.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,14 +22,15 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Private/DrawDebugHelpers.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Private/HAL/ThreadingBase.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/shared/nldef.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Classes/Components/MeshComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Public/DrawDebugHelpers.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Public/Async/Future.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/CoreUObject/Public/UObject/UObjectGlobals.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Private/DrawDebugHelpers.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Private/HAL/ThreadingBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Private/Serialization/Archive.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Public/Async/AsyncWork.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/shared/nldef.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/CoreUObject/Private/UObject/UObjectGlobals.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/CoreUObject/Public/UObject/Class.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Public/HAL/Runnable.h" root0="FORCE_HIGHLIGHTING" />
@@ -56,11 +61,11 @@
       <option value="$PROJECT_DIR$/Source/ProceduralProject/Component/VoxelGenerator.cpp" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/Voxel.h" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/Voxel.cpp" />
-      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.h" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.cpp" />
-      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.h" />
-      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/Quad.h" />
+      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.h" />
+      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.h" />
+      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.h" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.cpp" />
     </changedPaths>
@@ -393,7 +398,7 @@
       <workItem from="1613666433150" duration="6027000" />
       <workItem from="1613684759093" duration="11298000" />
       <workItem from="1613747027593" duration="6414000" />
-      <workItem from="1613756334199" duration="973000" />
+      <workItem from="1613756334199" duration="3421000" />
     </task>
     <task id="LOCAL-00001" summary="Added CompareQuad function for greedy meshing">
       <created>1613057058206</created>

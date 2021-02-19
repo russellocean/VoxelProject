@@ -48,6 +48,7 @@ void AVoxelChunk::CreateChunk(const FIntVector ChunkPosition)
 	{
 		Chunk.Voxels[v]->SetVisibility(CheckVoxelNeighbors(v));
 	}
+	ChunkMesh->VoxelMaterial = VoxelTerrain->VoxelMaterial;
 	ChunkMesh->ChunkToQuads(Chunk.Voxels);
 }
 
