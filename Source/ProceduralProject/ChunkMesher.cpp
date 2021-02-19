@@ -7,17 +7,6 @@ void UChunkMesher::ChunkToQuads(TArray<UVoxel*> Voxels)
 		if (Voxels[v]->IsVisible())
 		{
 			const FVector QuadOffset = FVector(Voxels[v]->GetWorldPosition()) * 100;
-			/*Vertices.Add(FVector(-50, -50, -50) + VertexOffset); //lower left - 0
-			Vertices.Add(FVector(-50, -50, 50) + VertexOffset); //upper left - 1
-			Vertices.Add(FVector(-50, 50, -50) + VertexOffset); //lower right - 2 
-			Vertices.Add(FVector(-50, 50, 50) + VertexOffset); //upper right - 3
-
-			Vertices.Add(FVector(50, -50, -50) + VertexOffset); //lower front left - 4
-			Vertices.Add(FVector(50, -50, 50) + VertexOffset); //upper front left - 5
-
-			Vertices.Add(FVector(50, 50, 50) + VertexOffset); //upper front right - 6
-			Vertices.Add(FVector(50, 50, -50) + VertexOffset); //lower front right - 7*/
-			TArray<FQuad*> Quads;
 
 			for (int n = 0; n < 6; n++)
 			{
@@ -74,71 +63,68 @@ void UChunkMesher::ChunkToQuads(TArray<UVoxel*> Voxels)
 			SectionIndex++;
 
 			SetMaterial(SectionIndex, VoxelMaterial);
-			
-			Quads.Empty();
 		}
 	}
 }
 
-void UChunkMesher::DrawQuad(FQuad* Quad, int Direction)
+void UChunkMesher::DrawQuad(FQuad* Quad, const int Direction)
 {;
 	const FIntVector QOrigin = FIntVector(Quad->X, Quad->Y, Quad->Z);
+
+	Vertices.Add(FVector(QOrigin.X, QOrigin.Y, QOrigin.Z));
+	
 	switch (Direction)
 	{
 	case(0):
 		{
 			//Front
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y, QOrigin.Z));
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y, QOrigin.Z + (Quad->H * 100)));
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y + (Quad->W * 100), QOrigin.Z + (Quad->H * 100)));
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y + (Quad->W * 100), QOrigin.Z));
+			Vertices.Add(FVector(QOrigin.X, QOrigin.Y + (Quad->W * 100), QOrigin.Z)); //Right
+			Vertices.Add(FVector(QOrigin.X, QOrigin.Y + (Quad->W * 100), QOrigin.Z + (Quad->H * 100))); //Up Right
+			Vertices.Add(FVector(QOrigin.X, QOrigin.Y, QOrigin.Z + (Quad->H * 100))); // Up
 		} break;
 	case(1):
 		{
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y, QOrigin.Z));
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y, QOrigin.Z + (Quad->H * 100)));
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y + (Quad->W * 100), QOrigin.Z + (Quad->H * 100)));
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y + (Quad->W * 100), QOrigin.Z));
+			Vertices.Add(FVector(QOrigin.X, QOrigin.Y + (Quad->W * 100), QOrigin.Z)); //Right
+			Vertices.Add(FVector(QOrigin.X, QOrigin.Y + (Quad->W * 100), QOrigin.Z + (Quad->H * 100))); //Up Right
+			Vertices.Add(FVector(QOrigin.X, QOrigin.Y, QOrigin.Z + (Quad->H * 100))); // Up
 		} break;
 	case(2):
 		{
-
-			//2 1 0
-			//3 2 0
 			//Right
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y, QOrigin.Z));//0
+			Vertices.Add(FVector(QOrigin.X, QOrigin.Y, QOrigin.Z + (Quad->H * 100)));//Up
+			Vertices.Add(FVector(QOrigin.X + (Quad->D * 100), QOrigin.Y, QOrigin.Z + (Quad->H * 100))); //Up Forward
+			Vertices.Add(FVector(QOrigin.X + (Quad->D * 100), QOrigin.Y, QOrigin.Z)); // Forward
+		} break;
+	case(3):
+		{
 			Vertices.Add(FVector(QOrigin.X, QOrigin.Y, QOrigin.Z + (Quad->H * 100)));//1
 			Vertices.Add(FVector(QOrigin.X + (Quad->D * 100), QOrigin.Y, QOrigin.Z + (Quad->H * 100)));//2
 			Vertices.Add(FVector(QOrigin.X + (Quad->D * 100), QOrigin.Y, QOrigin.Z));//3
 		} break;
-	case(3):
-		{
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y, QOrigin.Z));
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y, QOrigin.Z + (Quad->H * 100)));
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y + (Quad->W * 100), QOrigin.Z + (Quad->H * 100)));
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y + (Quad->W * 100), QOrigin.Z));
-		} break;
 	case(4):
 		{
 			//Top
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y, QOrigin.Z));
+			Vertices.Add(FVector(QOrigin.X + (Quad->D * 100), QOrigin.Y, QOrigin.Z)); // Forward
+			Vertices.Add(FVector(QOrigin.X + (Quad->D * 100), QOrigin.Y + (Quad->W * 100), QOrigin.Z)); // Forward Up
+			Vertices.Add(FVector(QOrigin.X, QOrigin.Y + (Quad->W * 100), QOrigin.Z)); // Up
+		} break;
+	case(5):
+		{
 			Vertices.Add(FVector(QOrigin.X + (Quad->D * 100), QOrigin.Y, QOrigin.Z));
 			Vertices.Add(FVector(QOrigin.X + (Quad->D * 100), QOrigin.Y + (Quad->W * 100), QOrigin.Z));
 			Vertices.Add(FVector(QOrigin.X, QOrigin.Y + (Quad->W * 100), QOrigin.Z));
 		} break;
-	case(5):
-		{
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y, QOrigin.Z));
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y, QOrigin.Z + (Quad->H * 100)));
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y + (Quad->W * 100), QOrigin.Z + (Quad->H * 100)));
-			Vertices.Add(FVector(QOrigin.X, QOrigin.Y + (Quad->W * 100), QOrigin.Z));
-		} break;
 	}
 
-	
-	AddTriangle(2,1,0);
-	AddTriangle(3,2,0);
-
+	if(Direction % 2 == 0)
+	{
+		AddTriangle(2,1,0);
+		AddTriangle(3,2,0);
+	} else
+	{
+		AddTriangle(0,1,2);
+		AddTriangle(0,2,3);
+	}
 	UVs.Add(FVector2D(0, 0));
 	UVs.Add(FVector2D(1, 0));
 	UVs.Add(FVector2D(1, 1));
