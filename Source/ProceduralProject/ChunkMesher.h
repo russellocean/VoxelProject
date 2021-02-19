@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ProceduralMeshComponent.h"
 #include "Voxel.h"
+#include "Quad.h"
 
 #include "ChunkMesher.generated.h"
 
@@ -28,6 +29,10 @@ private:
 
 	TArray<FLinearColor> VertexColors;
 	TArray<FVector2D> UVs;
+
+	int32 SectionIndex = 0;
+
+	void DrawQuad(FQuad* Quad, int Direction);
 
 	/* Creates a triangle that connects the given vertices */
 	void AddTriangle(int32 V1, int32 V2, int32 V3);

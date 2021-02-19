@@ -40,7 +40,6 @@
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Developer/PluginUtils" />
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Developer/PropertyAccessNode" />
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Developer/RenderDocPlugin" />
-    <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Developer/RiderLink" />
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Developer/RiderSourceCodeAccess" />
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Developer/SubversionSourceControl" />
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Developer/TraceDataFiltering" />
@@ -168,7 +167,6 @@
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Lumin/MagicLeapPassableWorld" />
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Lumin/MagicLeapSharedFile" />
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Lumin/MagicLeapTablet" />
-    <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Marketplace/NoisePlugin" />
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Media/AjaMedia" />
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Media/AndroidCamera" />
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Media/AndroidMedia" />
@@ -177,6 +175,8 @@
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Media/AvfMedia" />
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Media/AvidDNxMedia" />
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Media/BlackmagicMedia" />
+    <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Media/ElectraPlayer" />
+    <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Media/ElectraUtil" />
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Media/HAPMedia" />
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Media/HLMedia" />
     <content url="file://$MODULE_DIR$/../../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Media/ImgMedia" />
