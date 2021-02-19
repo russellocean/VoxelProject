@@ -1,41 +1,23 @@
 ﻿#include "Voxel.h"
 
-void UVoxel::SetVoxelPosition(const FIntVector Position)
+void UVoxel::Initialize(FIntVector Position, TEnumAsByte<EType> Type)
 {
-	Voxel.VoxelPosition = Position;
+	SetWorldPosition(Position);
+	SetType(Type);
 }
 
-FIntVector UVoxel::GetVoxelPosition() const
-{
-	return Voxel.VoxelPosition;
-}
+void UVoxel::SetWorldPosition(const FIntVector Position) { Voxel.VoxelPosition = Position; }
 
-void UVoxel::SetNeighbor(UVoxel* NeighborVoxel, const int32 Direction)
-{
-	Neighbors[Direction] = NeighborVoxel;
-}
+FIntVector UVoxel::GetWorldPosition() const { return Voxel.VoxelPosition;}
 
-UVoxel* UVoxel::GetNeighbor(const int32 Direction)
-{
-	return Neighbors[Direction];
-}
+void UVoxel::SetType(const TEnumAsByte<EType> Type) { Voxel.VoxelType = Type; }
 
-void UVoxel::SetVoxelID(const int32 VoxelID)
-{
-	Voxel.VoxelID = VoxelID;
-}
+TEnumAsByte<EType> UVoxel::GetType() const { return Voxel.VoxelType;}
 
-int32 UVoxel::GetVoxelID() const
-{
-	return Voxel.VoxelID;
-}
+void UVoxel::SetVisibility(const bool Visibility) { Voxel.bIsVisible = Visibility; }
 
-bool UVoxel::IsVisible() const
-{
-	return Voxel.bIsVisible;
-}
+bool UVoxel::IsVisible() const { return Voxel.bIsVisible; }
 
-void UVoxel::SetVisibility(const bool Visibility)
-{
-	Voxel.bIsVisible = Visibility;
-}
+void UVoxel::SetNeighbor(const TEnumAsByte<EType> Type, const int32 Direction) { Voxel.Neighbors[Direction] = Type; }
+
+EType UVoxel::GetNeighbor(const int32 Direction) { return Voxel.Neighbors[Direction]; }

@@ -9,7 +9,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/riderModule.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/riderModule.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProceduralProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/FirstPersonCPP/Maps/FirstPersonExampleMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/FirstPersonCPP/Maps/FirstPersonExampleMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Plugins/Developer/RiderLink/Binaries/Win64/UE4Editor-RD.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/Developer/RiderLink/Binaries/Win64/UE4Editor-RD.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Plugins/Developer/RiderLink/Binaries/Win64/UE4Editor-RiderBlueprintExtension.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/Developer/RiderLink/Binaries/Win64/UE4Editor-RiderBlueprintExtension.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Plugins/Developer/RiderLink/Binaries/Win64/UE4Editor-RiderGameControlExtension.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/Developer/RiderLink/Binaries/Win64/UE4Editor-RiderGameControlExtension.pdb" afterDir="false" />
@@ -210,8 +209,8 @@
       <change beforePath="$PROJECT_DIR$/Plugins/Developer/RiderLink/Intermediate/Build/Win64/UE4Editor/Development/RiderLoggingExtension/UE4Editor-RiderLoggingExtension.exp" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/Developer/RiderLink/Intermediate/Build/Win64/UE4Editor/Development/RiderLoggingExtension/UE4Editor-RiderLoggingExtension.exp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Plugins/Developer/RiderLink/Intermediate/Build/Win64/UE4Editor/Development/RiderLoggingExtension/UE4Editor-RiderLoggingExtension.suppressed.exp" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/Developer/RiderLink/Intermediate/Build/Win64/UE4Editor/Development/RiderLoggingExtension/UE4Editor-RiderLoggingExtension.suppressed.exp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/Quad.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/Quad.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/Component/VoxelGenerator.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/Component/VoxelGenerator.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/Voxel.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/Voxel.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/Voxel.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/Voxel.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" afterDir="false" />
@@ -228,17 +227,18 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Public/DrawDebugHelpers.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Public/Async/Future.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/CoreUObject/Public/UObject/UObjectGlobals.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Private/DrawDebugHelpers.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Private/HAL/ThreadingBase.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Private/Serialization/Archive.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Public/Async/AsyncWork.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/shared/nldef.h" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/CoreUObject/Private/UObject/UObjectGlobals.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/CoreUObject/Public/UObject/Class.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Public/Async/Future.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Public/HAL/Runnable.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Public/Async/AsyncWork.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Public/DrawDebugHelpers.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Public/Math/GenericOctree.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/CoreUObject/Private/UObject/UObjectGlobals.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/CoreUObject/Public/UObject/UObjectGlobals.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/shared/nldef.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Core/Private/Serialization/Archive.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Epic Games/UE_4.26/Engine/Source/Runtime/Engine/Private/DrawDebugHelpers.cpp" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
@@ -265,13 +265,13 @@
       <option value="$PROJECT_DIR$/Source/ProceduralProject/Quad.h" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/Component/VoxelGenerator.cpp" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.h" />
-      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.h" />
-      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.cpp" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/Voxel.h" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/Voxel.cpp" />
+      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.h" />
+      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelTerrain.cpp" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.h" />
-      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" />
       <option value="$PROJECT_DIR$/Source/ProceduralProject/ChunkMesher.cpp" />
+      <option value="$PROJECT_DIR$/Source/ProceduralProject/VoxelChunk.cpp" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1n7KwbufR5thYJA67wdYFfCp8yg" />
@@ -600,6 +600,7 @@
       <workItem from="1613665803216" duration="137000" />
       <workItem from="1613665986543" duration="76000" />
       <workItem from="1613666433150" duration="6027000" />
+      <workItem from="1613684759093" duration="11298000" />
     </task>
     <task id="LOCAL-00001" summary="Added CompareQuad function for greedy meshing">
       <created>1613057058206</created>

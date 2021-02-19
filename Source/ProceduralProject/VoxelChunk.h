@@ -5,6 +5,7 @@
 #include "ChunkMesher.h"
 
 #include "Voxel.h"
+#include "VoxelTerrain.h"
 #include "GameFramework/Actor.h"
 #include "VoxelChunk.generated.h"
 
@@ -30,10 +31,8 @@ struct FChunkData
 UCLASS(BlueprintType)
 class PROCEDURALPROJECT_API AVoxelChunk final : public AActor
 {
-	GENERATED_BODY()
+	GENERATED_BODY()	
 protected:
-	virtual void BeginPlay() override;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Chunk)
 	FChunkData Chunk;
 
@@ -44,15 +43,18 @@ public:
 	AVoxelChunk();
 
 	//Must be called after voxel constructed
-	void Initialize(FIntVector ChunkCoords);
+	void Initialize(FIntVector ChunkCoords, AVoxelTerrain* VoxelWorld);
 
 	FIntVector GetChunkPosition() const;
 
-	void AddVoxel(UVoxel Voxel);
+	UVoxel* GetVoxelAt(FIntVector VoxelLocalPosition);
 
 private:
 	void CreateChunk(const FIntVector ChunkPosition);
 	bool CheckVoxelNeighbors(int32 VoxelIndex);
 
 	static const FIntVector NeighborOffsets[6];
+
+	UPROPERTY()
+	AVoxelTerrain* VoxelTerrain;
 };

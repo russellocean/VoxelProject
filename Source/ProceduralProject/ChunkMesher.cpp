@@ -7,7 +7,7 @@ void UChunkMesher::ChunkToQuads(TArray<UVoxel*> Voxels)
 	{
 		if (Voxels[v]->IsVisible())
 		{
-			FVector VertexOffset = FVector(Voxels[v]->GetVoxelPosition()) * 100;
+			FVector VertexOffset = FVector(Voxels[v]->GetWorldPosition()) * 100;
 			Vertices.Add(FVector(-50, -50, -50) + VertexOffset); //lower left - 0
 			Vertices.Add(FVector(-50, -50, 50) + VertexOffset); //upper left - 1
 			Vertices.Add(FVector(-50, 50, -50) + VertexOffset); //lower right - 2 
@@ -21,7 +21,7 @@ void UChunkMesher::ChunkToQuads(TArray<UVoxel*> Voxels)
 
 			for (int n = 0; n < 6; n++)
 			{
-				if (Voxels[v]->GetNeighbor(n) == nullptr)
+				if (Voxels[v]->GetNeighbor(n) == Air)
 				{
 					switch (n)
 					{
