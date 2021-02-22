@@ -61,6 +61,16 @@ void UChunkMesher::ChunkToQuads(TArray<UVoxel*> Voxels)
 			}
 		}
 	}
+
+	CreateMeshSection_LinearColor(0, Vertices, Triangles, TArray<FVector>(), UVs, VertexColors,
+                      TArray<FProcMeshTangent>(), true);
+
+	SetMaterial(0, VoxelMaterial);
+
+	Vertices.Empty();
+	Triangles.Empty();
+	UVs.Empty();
+	VertexColors.Empty();
 }
 
 void UChunkMesher::DrawQuad(FQuad* Quad, const int Direction)
@@ -121,6 +131,10 @@ void UChunkMesher::DrawQuad(FQuad* Quad, const int Direction)
 		AddTriangle(0,1,2);
 		AddTriangle(0,2,3);
 	}
+
+	//SectionIndex++;
+	TriOffset += 4;
+	
 	UVs.Add(FVector2D(0, 0));
 	UVs.Add(FVector2D(1, 0));
 	UVs.Add(FVector2D(1, 1));
@@ -135,22 +149,11 @@ void UChunkMesher::DrawQuad(FQuad* Quad, const int Direction)
 	VertexColors.Add(FLinearColor::MakeRandomColor());
 	VertexColors.Add(FLinearColor::MakeRandomColor());
 	VertexColors.Add(FLinearColor::MakeRandomColor());
-	CreateMeshSection_LinearColor(SectionIndex, Vertices, Triangles, TArray<FVector>(), UVs, VertexColors,
-                          TArray<FProcMeshTangent>(), true);
-
-	SetMaterial(SectionIndex, VoxelMaterial);
-
-	SectionIndex++;
-
-	Vertices.Empty();
-	Triangles.Empty();
-	UVs.Empty();
-	VertexColors.Empty();
 }
 
 void UChunkMesher::AddTriangle(const int32 V1, const int32 V2, const int32 V3)
 {
-	Triangles.Add(V1);
-	Triangles.Add(V2);
-	Triangles.Add(V3);
+	Triangles.Add(V1 + TriOffset);
+	Triangles.Add(V2 + TriOffset);
+	Triangles.Add(V3 + TriOffset);
 }
