@@ -120,6 +120,10 @@ void UChunkMesher::DrawQuad(FQuad* Quad, const int Direction)
 			Vertices.Add(FVector(QOrigin.X + (Quad->D * 100), QOrigin.Y + (Quad->W * 100), QOrigin.Z));
 			Vertices.Add(FVector(QOrigin.X, QOrigin.Y + (Quad->W * 100), QOrigin.Z));
 		} break;
+	default:
+		{
+			return;
+		};
 	}
 
 	if(Direction % 2 == 0)

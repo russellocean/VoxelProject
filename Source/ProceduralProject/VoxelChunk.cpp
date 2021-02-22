@@ -39,7 +39,13 @@ void AVoxelChunk::CreateChunk(const FIntVector ChunkPosition)
 					j + (Chunk.ChunkSize * ChunkPosition.Y),
 					k + (Chunk.ChunkSize * ChunkPosition.Z)
 				};
-				Voxel->Initialize(VoxelPosition, Grass);
+				if(UNoiseBlueprintFunctionLibrary::GetPerlin3D( VoxelTerrain->Seed,  VoxelTerrain->Frequency,  VoxelTerrain->Interpolation, FVector(VoxelPosition)) < 0.01f)
+				{
+					Voxel->Initialize(VoxelPosition, Air);
+				} else
+				{
+					Voxel->Initialize(VoxelPosition, Grass);
+				}
 				Chunk.Voxels.Add(Voxel);
 			}
 		}
@@ -63,32 +69,50 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 	if(Voxel->GetWorldPosition().X % Chunk.ChunkSize != Chunk.ChunkSize-1)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex + 1]->GetType(), 0);
-		TotalNeighbors++;
+		if(Voxel->GetNeighbor(0) != Air)
+		{
+			TotalNeighbors++;
+		} 
 	}
 	if(Voxel->GetWorldPosition().X % Chunk.ChunkSize != 0)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex - 1]->GetType(), 1);
-		TotalNeighbors++;
+		if(Voxel->GetNeighbor(1) != Air)
+		{
+			TotalNeighbors++;
+		} 
 	}
 	if(Voxel->GetWorldPosition().Y % Chunk.ChunkSize != Chunk.ChunkSize-1)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex + 16]->GetType(), 2);
-		TotalNeighbors++;
+		if(Voxel->GetNeighbor(2) != Air)
+		{
+			TotalNeighbors++;
+		} 
 	}
 	if(Voxel->GetWorldPosition().Y % Chunk.ChunkSize != 0)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex - 16]->GetType(), 3);
-		TotalNeighbors++;
+		if(Voxel->GetNeighbor(3) != Air)
+		{
+			TotalNeighbors++;
+		} 
 	}
 	if(Voxel->GetWorldPosition().Z % Chunk.ChunkSize != Chunk.ChunkSize-1)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex + 256]->GetType(), 4);
-		TotalNeighbors++;
+		if(Voxel->GetNeighbor(4) != Air)
+		{
+			TotalNeighbors++;
+		} 
 	}
 	if(Voxel->GetWorldPosition().Z % Chunk.ChunkSize != 0)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex - 256]->GetType(), 5);
-		TotalNeighbors++;
+		if(Voxel->GetNeighbor(5) != Air)
+		{
+			TotalNeighbors++;
+		} 
 	}
 	if(TotalNeighbors == 6)
 	{

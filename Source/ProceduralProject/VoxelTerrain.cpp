@@ -15,8 +15,11 @@ void AVoxelTerrain::BeginPlay()
 	{
 		for (int32 y = 0; y < RenderDistance; y++)
 		{
-			AVoxelChunk* Chunk = static_cast<AVoxelChunk*>(GetWorld()->SpawnActor(AVoxelChunk::StaticClass()));
-			Chunk->Initialize(FIntVector(x, y, 0), this);
+			for(int32 z = 0; z < RenderDistance; z++)
+			{
+				AVoxelChunk* Chunk = static_cast<AVoxelChunk*>(GetWorld()->SpawnActor(AVoxelChunk::StaticClass()));
+				Chunk->Initialize(FIntVector(x, y, z), this);
+			}
 		}
 	}
 }
