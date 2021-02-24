@@ -42,12 +42,15 @@ void AVoxelChunk::CreateChunk()
 					k + (Chunk.ChunkSize * Chunk.ChunkPosition.Z)
 				};
 
-				if(UNoiseBlueprintFunctionLibrary::GetPerlin3D( VoxelTerrain->Seed,  VoxelTerrain->Frequency,  VoxelTerrain->Interpolation, FVector(VoxelPosition)) < 0.01f)
-				{
-					Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Air);
-				} else
+				const double Height = UNoiseBlueprintFunctionLibrary::GetSimplex2D( VoxelTerrain->Seed, VoxelTerrain->Frequency, FVector2D(VoxelPosition.X,VoxelPosition.Y))
+				* Chunk.ChunkSize *3;
+
+				if(VoxelPosition.Z <= Height)
 				{
 					Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Grass);
+				} else
+				{
+					Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Air);
 				}
 
 				Chunk.Voxels.Add(Voxel);

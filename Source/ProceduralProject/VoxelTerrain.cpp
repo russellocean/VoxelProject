@@ -34,7 +34,7 @@ void AVoxelTerrain::Tick(float DeltaTime)
 	{
 		for (int32 y = PlayerChunkPosition.Y-RenderDistance; y < PlayerChunkPosition.Y+RenderDistance; y++)
 		{
-			for (int32 z = -1; z < 1; z++)
+			for (int32 z = -2; z <= 1; z++)
 			{
 				if(!ChunksVisited.Contains(FIntVector(x,y,z)))
 				{
