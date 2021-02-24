@@ -20,7 +20,11 @@ struct FVoxelData
 	GENERATED_BODY()
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Voxel)
-	FIntVector VoxelPosition;
+	FIntVector VoxelWorldPosition;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Voxel)
+	FIntVector VoxelLocalPosition;
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Voxel)
 	TEnumAsByte<EType> VoxelType;
@@ -38,10 +42,13 @@ class PROCEDURALPROJECT_API UVoxel final : public UObject
 	FVoxelData Voxel;
 
 public:
-	void Initialize(FIntVector Position, TEnumAsByte<EType> Type);
+	void Initialize(FIntVector WorldPosition, FIntVector LocalPosition, TEnumAsByte<EType> Type);
 	
 	void SetWorldPosition(FIntVector Position);
 	FIntVector GetWorldPosition() const;
+
+	void SetLocalPosition(FIntVector Position);
+	FIntVector GetLocalPosition() const;
 
 	void SetType(TEnumAsByte<EType> Type);
 	TEnumAsByte<EType> GetType() const;

@@ -12,18 +12,20 @@ void AVoxelChunk::Initialize(const FIntVector ChunkCoords, AVoxelTerrain* VoxelW
 	if (Chunk.IsNewChunk)
 	{
 		VoxelTerrain = VoxelWorld;
-		CreateChunk(FIntVector(ChunkCoords));
+		Chunk.ChunkPosition = ChunkCoords;
+		CreateChunk();
 		Chunk.IsNewChunk = false;
 	}
 	else
 	{
+		return;
 		// Load chunk from disk
 	}
 }
 
 // xyz global space | ijk local chunk space
 
-void AVoxelChunk::CreateChunk(const FIntVector ChunkPosition)
+void AVoxelChunk::CreateChunk()
 {
 	//Loop from bottom to top
 	for (int32 k = 0; k < Chunk.ChunkSize; k++)
@@ -35,25 +37,28 @@ void AVoxelChunk::CreateChunk(const FIntVector ChunkPosition)
 				UVoxel* Voxel;
 				Voxel = NewObject<UVoxel>();
 				const FIntVector VoxelPosition = FIntVector{
-					i + (Chunk.ChunkSize * ChunkPosition.X),
-					j + (Chunk.ChunkSize * ChunkPosition.Y),
-					k + (Chunk.ChunkSize * ChunkPosition.Z)
+					i + (Chunk.ChunkSize * Chunk.ChunkPosition.X),
+					j + (Chunk.ChunkSize * Chunk.ChunkPosition.Y),
+					k + (Chunk.ChunkSize * Chunk.ChunkPosition.Z)
 				};
+
 				if(UNoiseBlueprintFunctionLibrary::GetPerlin3D( VoxelTerrain->Seed,  VoxelTerrain->Frequency,  VoxelTerrain->Interpolation, FVector(VoxelPosition)) < 0.01f)
 				{
-					Voxel->Initialize(VoxelPosition, Air);
+					Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Air);
 				} else
 				{
-					Voxel->Initialize(VoxelPosition, Grass);
+					Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Grass);
 				}
+
 				Chunk.Voxels.Add(Voxel);
 			}
 		}
 	}
 	for(int32 v = 0; v < Chunk.Voxels.Num(); v++)
-	{
+	{		
 		Chunk.Voxels[v]->SetVisibility(CheckVoxelNeighbors(v));
 	}
+	
 	ChunkMesh->VoxelMaterial = VoxelTerrain->VoxelMaterial;
 	ChunkMesh->ChunkToQuads(Chunk.Voxels);
 }
@@ -66,7 +71,7 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 	{
 		return false;
 	}
-	if(Voxel->GetWorldPosition().X % Chunk.ChunkSize != Chunk.ChunkSize-1)
+	if(Voxel->GetLocalPosition().X != Chunk.ChunkSize - 1)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex + 1]->GetType(), 0);
 		if(Voxel->GetNeighbor(0) != Air)
@@ -74,7 +79,7 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 			TotalNeighbors++;
 		} 
 	}
-	if(Voxel->GetWorldPosition().X % Chunk.ChunkSize != 0)
+	if(Voxel->GetLocalPosition().X != 0)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex - 1]->GetType(), 1);
 		if(Voxel->GetNeighbor(1) != Air)
@@ -82,7 +87,7 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 			TotalNeighbors++;
 		} 
 	}
-	if(Voxel->GetWorldPosition().Y % Chunk.ChunkSize != Chunk.ChunkSize-1)
+	if(Voxel->GetLocalPosition().Y != Chunk.ChunkSize - 1)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex + 16]->GetType(), 2);
 		if(Voxel->GetNeighbor(2) != Air)
@@ -90,7 +95,7 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 			TotalNeighbors++;
 		} 
 	}
-	if(Voxel->GetWorldPosition().Y % Chunk.ChunkSize != 0)
+	if(Voxel->GetLocalPosition().Y != 0)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex - 16]->GetType(), 3);
 		if(Voxel->GetNeighbor(3) != Air)
@@ -98,7 +103,7 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 			TotalNeighbors++;
 		} 
 	}
-	if(Voxel->GetWorldPosition().Z % Chunk.ChunkSize != Chunk.ChunkSize-1)
+	if(Voxel->GetLocalPosition().Z != Chunk.ChunkSize - 1)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex + 256]->GetType(), 4);
 		if(Voxel->GetNeighbor(4) != Air)
@@ -106,7 +111,7 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 			TotalNeighbors++;
 		} 
 	}
-	if(Voxel->GetWorldPosition().Z % Chunk.ChunkSize != 0)
+	if(Voxel->GetLocalPosition().Z != 0)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex - 256]->GetType(), 5);
 		if(Voxel->GetNeighbor(5) != Air)
@@ -114,6 +119,7 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 			TotalNeighbors++;
 		} 
 	}
+	
 	if(TotalNeighbors == 6)
 	{
 		return false; //Voxel should be culled

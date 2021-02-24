@@ -10,21 +10,40 @@ AVoxelTerrain::AVoxelTerrain()
 void AVoxelTerrain::BeginPlay()
 {
 	Super::BeginPlay();
+}
 
-	for (int32 x = 0; x < RenderDistance; x++)
-	{
-		for (int32 y = 0; y < RenderDistance; y++)
-		{
-			for(int32 z = 0; z < RenderDistance; z++)
-			{
-				AVoxelChunk* Chunk = static_cast<AVoxelChunk*>(GetWorld()->SpawnActor(AVoxelChunk::StaticClass()));
-				Chunk->Initialize(FIntVector(x, y, z), this);
-			}
-		}
-	}
+void AVoxelTerrain::InitializeChunk(const FIntVector ChunkPosition)
+{
+	AVoxelChunk* Chunk = static_cast<AVoxelChunk*>(GetWorld()->SpawnActor(AVoxelChunk::StaticClass()));
+	Chunk->Initialize(ChunkPosition, this);
+
+	ChunksVisited.Add(ChunkPosition);
 }
 
 void AVoxelTerrain::Tick(float DeltaTime)
 {
+	const FVector PlayerPosition = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation() / 100;
+	const FVector PlayerChunkPosition = FVector(PlayerPosition.X / 16, PlayerPosition.Y / 16, PlayerPosition.Z / 16);
+	/*if(GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Current Player Position: %f, %f, %f"), PlayerPosition.X, PlayerPosition.Y, PlayerPosition.Z));
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Current Player Chunk Position: %f, %f, %f"), PlayerChunkPosition.X, PlayerChunkPosition.Y, PlayerChunkPosition.Z));
+	}*/
+
+	for (int32 x = PlayerChunkPosition.X-RenderDistance; x < PlayerChunkPosition.X+RenderDistance; x++)
+	{
+		for (int32 y = PlayerChunkPosition.Y-RenderDistance; y < PlayerChunkPosition.Y+RenderDistance; y++)
+		{
+			for (int32 z = -1; z < 1; z++)
+			{
+				if(!ChunksVisited.Contains(FIntVector(x,y,z)))
+				{
+					InitializeChunk(FIntVector(x,y,z));
+				}
+			}
+		}
+	}
+	
 	Super::Tick(DeltaTime);
 }
+

@@ -28,7 +28,6 @@ private:
 	TArray<FLinearColor> VertexColors;
 	TArray<FVector2D> UVs;
 
-	//int32 SectionIndex = 1;
 	int32 TriOffset {0};
 
 	void DrawQuad(FQuad* Quad, int Direction);

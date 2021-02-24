@@ -50,7 +50,7 @@ public:
 	UVoxel* GetVoxelAt(FIntVector VoxelLocalPosition);
 
 private:
-	void CreateChunk(const FIntVector ChunkPosition);
+	void CreateChunk();
 	bool CheckVoxelNeighbors(int32 VoxelIndex);
 
 	static const FIntVector NeighborOffsets[6];

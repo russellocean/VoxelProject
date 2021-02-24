@@ -28,9 +28,16 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	EInterp Interpolation;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TArray<FIntVector> ChunksVisited;
 
 protected:
 	virtual void BeginPlay() override;
+
+	void InitializeChunk(FIntVector ChunkPosition);
+
+
 
 public:
 	virtual void Tick(float DeltaTime) override;

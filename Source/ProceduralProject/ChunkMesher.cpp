@@ -136,7 +136,6 @@ void UChunkMesher::DrawQuad(FQuad* Quad, const int Direction)
 		AddTriangle(0,2,3);
 	}
 
-	//SectionIndex++;
 	TriOffset += 4;
 	
 	UVs.Add(FVector2D(0, 0));
