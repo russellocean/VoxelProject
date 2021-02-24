@@ -43,7 +43,7 @@ void AVoxelChunk::CreateChunk()
 				};
 
 				const double Height = UNoiseBlueprintFunctionLibrary::GetSimplex2D( VoxelTerrain->Seed, VoxelTerrain->Frequency, FVector2D(VoxelPosition.X,VoxelPosition.Y))
-				* Chunk.ChunkSize *3;
+				* 15 * 3;
 
 				if(VoxelPosition.Z <= Height)
 				{

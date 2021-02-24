@@ -154,6 +154,14 @@ void UChunkMesher::DrawQuad(FQuad* Quad, const int Direction)
 	VertexColors.Add(FLinearColor::MakeRandomColor());
 }
 
+int32 UChunkMesher::VertexAO(const bool Side1, const bool Side2, const bool Corner)
+{
+	if(Side1 && Side2) {
+		return 0;
+      }
+	return 3 - (Side1 + Side2 + Corner);
+}
+
 void UChunkMesher::AddTriangle(const int32 V1, const int32 V2, const int32 V3)
 {
 	Triangles.Add(V1 + TriOffset);

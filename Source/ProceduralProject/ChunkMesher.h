@@ -1,6 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include <d3d12.h>
+
 #include "ProceduralMeshComponent.h"
 #include "Voxel.h"
 #include "Quad.h"
@@ -31,6 +34,8 @@ private:
 	int32 TriOffset {0};
 
 	void DrawQuad(FQuad* Quad, int Direction);
+
+	static int32 VertexAO(bool Side1, bool Side2, bool Corner);
 
 	/* Creates a triangle that connects the given vertices */
 	void AddTriangle(int32 V1, int32 V2, int32 V3);
