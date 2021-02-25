@@ -54,8 +54,8 @@ public:
 
 	FChunkData* GetChunkData();
 	
-	void SetChunkNeighbor(FChunkData* ChunkData, FIntVector Direction);
-	FChunkData* GetChunkNeighbor(FIntVector Direction);
+	void SetChunkNeighbor(FChunkData* ChunkData, int32 Direction);
+	FChunkData* GetChunkNeighbor(int32 Direction);
 
 private:
 	void CreateChunk();

@@ -138,6 +138,12 @@ UVoxel* AVoxelChunk::GetVoxelAt(const FIntVector VoxelLocalPosition)
 	return Chunk.Voxels[VoxelLocalPosition.X + (VoxelLocalPosition.Y * 16) + (VoxelLocalPosition.Z * 256)];
 }
 
+FChunkData* AVoxelChunk::GetChunkData() { return &Chunk; }
+
+void AVoxelChunk::SetChunkNeighbor(FChunkData* ChunkData, const int32 Direction) { Chunk.NeighborChunks[Direction] = ChunkData; }
+
+FChunkData* AVoxelChunk::GetChunkNeighbor(const int32 Direction) { return Chunk.NeighborChunks[Direction]; }
+
 const FIntVector AVoxelChunk::NeighborOffsets[]{
 	FIntVector(1, 0, 0),
 	FIntVector(-1, 0, 0),

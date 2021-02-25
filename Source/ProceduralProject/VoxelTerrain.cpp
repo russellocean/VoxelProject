@@ -21,6 +21,23 @@ void AVoxelTerrain::InitializeChunk(const FIntVector ChunkPosition)
 	TerrainData.VoxelChunks.Add(ChunkPosition, Chunk);
 }
 
+void AVoxelTerrain::CheckChunks(FVector PlayerChunkPosition)
+{
+	for(auto& Elem : TerrainData.VoxelChunks)
+	{
+		AVoxelChunk* Chunk = Elem.Value;
+		// If the chunks x is less than PlayerChunkPosition - Renderdistance OR PlayerChunkPosition + renderdistance REMOVE IT!
+		if(Chunk->GetChunkPosition().X < PlayerChunkPosition.X - TerrainData.RenderDistance || Chunk->GetChunkPosition().X < PlayerChunkPosition.X + TerrainData.RenderDistance)
+		{
+			Chunk->Destroy();
+			//TerrainData.VoxelChunks.Remove()
+			//DELETE CHUNK
+		}
+		//Elem.Key,
+		//*Elem.Value
+	}
+}
+
 void AVoxelTerrain::Tick(float DeltaTime)
 {
 	const FVector PlayerPosition = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation() / 100;
@@ -40,6 +57,7 @@ void AVoxelTerrain::Tick(float DeltaTime)
 				if(!TerrainData.VoxelChunks.Contains(FIntVector(x,y,z)))
 				{
 					InitializeChunk(FIntVector(x,y,z));
+					
 				}
 			}
 		}
