@@ -27,12 +27,38 @@ void AVoxelTerrain::CheckChunks(FVector PlayerChunkPosition)
 	{
 		AVoxelChunk* Chunk = Elem.Value;
 		// If the chunks x is less than PlayerChunkPosition - Renderdistance OR PlayerChunkPosition + renderdistance REMOVE IT!
-		if(Chunk->GetChunkPosition().X < PlayerChunkPosition.X - TerrainData.RenderDistance || Chunk->GetChunkPosition().X < PlayerChunkPosition.X + TerrainData.RenderDistance)
+		if(Chunk->GetChunkPosition().X < PlayerChunkPosition.X - TerrainData.RenderDistance || Chunk->GetChunkPosition().X > PlayerChunkPosition.X + TerrainData.RenderDistance)
 		{
 			Chunk->Destroy();
-			//TerrainData.VoxelChunks.Remove()
+			TerrainData.VoxelChunks.Remove(Chunk->GetChunkPosition());
+			if(GEngine)
+			{
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("ChunkDeleted X")));
+			}
+			continue;
 			//DELETE CHUNK
 		}
+		if(Chunk->GetChunkPosition().Y < PlayerChunkPosition.Y - TerrainData.RenderDistance || Chunk->GetChunkPosition().Y > PlayerChunkPosition.Y + TerrainData.RenderDistance)
+		{
+			Chunk->Destroy();
+			TerrainData.VoxelChunks.Remove(Chunk->GetChunkPosition());
+			if(GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("ChunkDeleted Y")));
+			}
+			continue;
+			//DELETE CHUNK
+		}
+		/*if(Chunk->GetChunkPosition().Z < PlayerChunkPosition.Z - TerrainData.RenderDistance || Chunk->GetChunkPosition().Z > PlayerChunkPosition.Z + TerrainData.RenderDistance)
+		{
+			Chunk->Destroy();
+			TerrainData.VoxelChunks.Remove(Chunk->GetChunkPosition());
+			if(GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("ChunkDeleted Z")));
+			}
+			//DELETE CHUNK
+		}*/
 		//Elem.Key,
 		//*Elem.Value
 	}
@@ -57,7 +83,7 @@ void AVoxelTerrain::Tick(float DeltaTime)
 				if(!TerrainData.VoxelChunks.Contains(FIntVector(x,y,z)))
 				{
 					InitializeChunk(FIntVector(x,y,z));
-					
+					CheckChunks(PlayerChunkPosition);
 				}
 			}
 		}
