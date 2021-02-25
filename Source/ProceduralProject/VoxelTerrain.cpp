@@ -1,4 +1,5 @@
 ﻿#include "VoxelTerrain.h"
+
 #include "VoxelChunk.h"
 
 AVoxelTerrain::AVoxelTerrain()
@@ -15,9 +16,9 @@ void AVoxelTerrain::BeginPlay()
 void AVoxelTerrain::InitializeChunk(const FIntVector ChunkPosition)
 {
 	AVoxelChunk* Chunk = static_cast<AVoxelChunk*>(GetWorld()->SpawnActor(AVoxelChunk::StaticClass()));
-	Chunk->Initialize(ChunkPosition, this);
+	Chunk->Initialize(ChunkPosition, &TerrainData);
 
-	ChunksVisited.Add(ChunkPosition);
+	TerrainData.VoxelChunks.Add(ChunkPosition, Chunk);
 }
 
 void AVoxelTerrain::Tick(float DeltaTime)
@@ -30,13 +31,13 @@ void AVoxelTerrain::Tick(float DeltaTime)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Current Player Chunk Position: %f, %f, %f"), PlayerChunkPosition.X, PlayerChunkPosition.Y, PlayerChunkPosition.Z));
 	}*/
 
-	for (int32 x = PlayerChunkPosition.X-RenderDistance; x < PlayerChunkPosition.X+RenderDistance; x++)
+	for (int32 x = PlayerChunkPosition.X-TerrainData.RenderDistance; x < PlayerChunkPosition.X+TerrainData.RenderDistance; x++)
 	{
-		for (int32 y = PlayerChunkPosition.Y-RenderDistance; y < PlayerChunkPosition.Y+RenderDistance; y++)
+		for (int32 y = PlayerChunkPosition.Y-TerrainData.RenderDistance; y < PlayerChunkPosition.Y+TerrainData.RenderDistance; y++)
 		{
 			for (int32 z = -2; z <= 1; z++)
 			{
-				if(!ChunksVisited.Contains(FIntVector(x,y,z)))
+				if(!TerrainData.VoxelChunks.Contains(FIntVector(x,y,z)))
 				{
 					InitializeChunk(FIntVector(x,y,z));
 				}

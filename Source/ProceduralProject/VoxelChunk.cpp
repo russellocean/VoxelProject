@@ -1,4 +1,5 @@
 ﻿#include "VoxelChunk.h"
+#include "VoxelTerrain.h"
 
 AVoxelChunk::AVoxelChunk()
 {
@@ -7,11 +8,11 @@ AVoxelChunk::AVoxelChunk()
 	ChunkMesh->bUseAsyncCooking = true;
 }
 
-void AVoxelChunk::Initialize(const FIntVector ChunkCoords, AVoxelTerrain* VoxelWorld)
+void AVoxelChunk::Initialize(const FIntVector ChunkCoords, FVoxelTerrainData* TerrainData)
 {
 	if (Chunk.IsNewChunk)
 	{
-		VoxelTerrain = VoxelWorld;
+		WorldData = TerrainData;
 		Chunk.ChunkPosition = ChunkCoords;
 		CreateChunk();
 		Chunk.IsNewChunk = false;
@@ -42,7 +43,7 @@ void AVoxelChunk::CreateChunk()
 					k + (Chunk.ChunkSize * Chunk.ChunkPosition.Z)
 				};
 
-				const double Height = UNoiseBlueprintFunctionLibrary::GetSimplex2D( VoxelTerrain->Seed, VoxelTerrain->Frequency, FVector2D(VoxelPosition.X,VoxelPosition.Y))
+				const double Height = UNoiseBlueprintFunctionLibrary::GetSimplex2D( WorldData->Seed, WorldData->Frequency, FVector2D(VoxelPosition.X,VoxelPosition.Y))
 				* 15 * 3;
 
 				if(VoxelPosition.Z <= Height)
@@ -62,7 +63,7 @@ void AVoxelChunk::CreateChunk()
 		Chunk.Voxels[v]->SetVisibility(CheckVoxelNeighbors(v));
 	}
 	
-	ChunkMesh->VoxelMaterial = VoxelTerrain->VoxelMaterial;
+	ChunkMesh->VoxelMaterial = WorldData->VoxelMaterial;
 	ChunkMesh->ChunkToQuads(Chunk.Voxels);
 }
 
@@ -80,7 +81,7 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 		if(Voxel->GetNeighbor(0) != Air)
 		{
 			TotalNeighbors++;
-		} 
+		}
 	}
 	if(Voxel->GetLocalPosition().X != 0)
 	{
@@ -88,7 +89,7 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 		if(Voxel->GetNeighbor(1) != Air)
 		{
 			TotalNeighbors++;
-		} 
+		}
 	}
 	if(Voxel->GetLocalPosition().Y != Chunk.ChunkSize - 1)
 	{
@@ -96,7 +97,7 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 		if(Voxel->GetNeighbor(2) != Air)
 		{
 			TotalNeighbors++;
-		} 
+		}
 	}
 	if(Voxel->GetLocalPosition().Y != 0)
 	{
@@ -130,16 +131,12 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 	return true;
 }
 
-FIntVector AVoxelChunk::GetChunkPosition() const
-{
-	return Chunk.ChunkPosition;
-}
+FIntVector AVoxelChunk::GetChunkPosition() const { return Chunk.ChunkPosition; }
 
 UVoxel* AVoxelChunk::GetVoxelAt(const FIntVector VoxelLocalPosition)
 {
 	return Chunk.Voxels[VoxelLocalPosition.X + (VoxelLocalPosition.Y * 16) + (VoxelLocalPosition.Z * 256)];
 }
-
 
 const FIntVector AVoxelChunk::NeighborOffsets[]{
 	FIntVector(1, 0, 0),

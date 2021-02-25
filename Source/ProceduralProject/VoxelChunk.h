@@ -5,10 +5,11 @@
 #include "ChunkMesher.h"
 
 #include "Voxel.h"
-#include "VoxelTerrain.h"
+
 #include "GameFramework/Actor.h"
 #include "VoxelChunk.generated.h"
 
+struct FVoxelTerrainData;
 USTRUCT(BlueprintType)
 struct FChunkData
 {
@@ -26,6 +27,8 @@ struct FChunkData
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Chunk)
 	TArray<UVoxel*> Voxels;
+
+	FChunkData *NeighborChunks[6];
 };
 
 UCLASS(BlueprintType)
@@ -36,18 +39,23 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Chunk)
 	FChunkData Chunk;
 
-	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UChunkMesher* ChunkMesh;
 
 public:
 	AVoxelChunk();
 
 	//Must be called after voxel constructed
-	void Initialize(FIntVector ChunkCoords, AVoxelTerrain* VoxelWorld);
+	void Initialize(const FIntVector ChunkCoords, FVoxelTerrainData* TerrainData);
 
 	FIntVector GetChunkPosition() const;
 
 	UVoxel* GetVoxelAt(FIntVector VoxelLocalPosition);
+
+	FChunkData* GetChunkData();
+	
+	void SetChunkNeighbor(FChunkData* ChunkData, FIntVector Direction);
+	FChunkData* GetChunkNeighbor(FIntVector Direction);
 
 private:
 	void CreateChunk();
@@ -55,6 +63,5 @@ private:
 
 	static const FIntVector NeighborOffsets[6];
 
-	UPROPERTY()
-	AVoxelTerrain* VoxelTerrain;
+	FVoxelTerrainData* WorldData;
 };

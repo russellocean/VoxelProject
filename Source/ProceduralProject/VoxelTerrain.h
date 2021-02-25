@@ -6,13 +6,11 @@
 
 #include "VoxelTerrain.generated.h"
 
-UCLASS()
-class PROCEDURALPROJECT_API AVoxelTerrain : public AActor
+class AVoxelChunk;
+USTRUCT(BlueprintType)
+struct FVoxelTerrainData
 {
 	GENERATED_BODY()
-
-public:
-	AVoxelTerrain();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Chunk)
 	int32 RenderDistance{6};
@@ -28,16 +26,26 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	EInterp Interpolation;
-	
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	TArray<FIntVector> ChunksVisited;
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	TMap<FIntVector, AVoxelChunk*> VoxelChunks;
+};
+
+UCLASS()
+class PROCEDURALPROJECT_API AVoxelTerrain final : public AActor
+{
+	GENERATED_BODY()
+
+public:
+	AVoxelTerrain();
 
 protected:
 	virtual void BeginPlay() override;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Chunk)
+	FVoxelTerrainData TerrainData;
 
 	void InitializeChunk(FIntVector ChunkPosition);
-
-
 
 public:
 	virtual void Tick(float DeltaTime) override;

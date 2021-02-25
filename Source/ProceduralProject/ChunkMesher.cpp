@@ -142,11 +142,6 @@ void UChunkMesher::DrawQuad(FQuad* Quad, const int Direction)
 	UVs.Add(FVector2D(1, 0));
 	UVs.Add(FVector2D(1, 1));
 	UVs.Add(FVector2D(0, 1));
-	/*VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
-	VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
-	VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));
-	VertexColors.Add(FLinearColor(1.f, 1.f, 1.f));*/
-	
 
 	VertexColors.Add(FLinearColor::MakeRandomColor());
 	VertexColors.Add(FLinearColor::MakeRandomColor());
