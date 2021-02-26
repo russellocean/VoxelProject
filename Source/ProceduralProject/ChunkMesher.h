@@ -10,18 +10,11 @@
 
 #include "ChunkMesher.generated.h"
 
-UCLASS()
-class PROCEDURALPROJECT_API UChunkMesher : public UProceduralMeshComponent
+USTRUCT(BlueprintType)
+struct FUniqueVoxelTypes
 {
 	GENERATED_BODY()
 
-public:
-	void ChunkToQuads(TArray<UVoxel*> Voxels);
-
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	UMaterial* VoxelMaterial;
-
-private:
 	/* The vertices of the mesh */
 	TArray<FVector> Vertices;
 
@@ -30,13 +23,32 @@ private:
 
 	TArray<FLinearColor> VertexColors;
 	TArray<FVector2D> UVs;
+};
+
+
+UCLASS()
+class PROCEDURALPROJECT_API UChunkMesher : public UProceduralMeshComponent
+{
+	GENERATED_BODY()
+
+public:
+	void ChunkToQuads(TArray<UVoxel*> Voxels);
+
+	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	 UMaterial* VoxelMaterial;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UMaterial* DirtMaterial;
+
+private:
+	TMap<EType, FUniqueVoxelTypes> VoxelTypes;
 
 	int32 TriOffset {0};
 
-	void DrawQuad(FQuad* Quad, int Direction);
+	void DrawQuad(FQuad* Quad, int Direction, EType VoxelType);
 
 	static int32 VertexAO(bool Side1, bool Side2, bool Corner);
 
 	/* Creates a triangle that connects the given vertices */
-	void AddTriangle(int32 V1, int32 V2, int32 V3);
+	void AddTriangle(int32 V1, int32 V2, int32 V3, TArray<int32>* Triangles) const;
 };

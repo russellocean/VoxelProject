@@ -46,21 +46,27 @@ void AVoxelChunk::CreateChunk()
 				const double Height = UNoiseBlueprintFunctionLibrary::GetSimplex2D( WorldData->Seed, WorldData->Frequency, FVector2D(VoxelPosition.X,VoxelPosition.Y))
 				* 15 * 3;
 
-				 if(UNoiseBlueprintFunctionLibrary::GetSimplex3D(WorldData->Seed, WorldData->Frequency, FVector(VoxelPosition.X+1,VoxelPosition.Y,VoxelPosition.Z)) <= 0.01f)
-				 {
-				 	Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Air);
-				 } else
-				 {
-				 	Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Grass);
-				 }
+				 // if(UNoiseBlueprintFunctionLibrary::GetSimplex3D(WorldData->Seed, WorldData->Frequency, FVector(VoxelPosition.X+1,VoxelPosition.Y,VoxelPosition.Z)) <= 0.01f)
+				 // {
+				 // 	Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Air);
+				 // } else
+				 // {
+				 // 	Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Grass);
+				 // }
 
 				 if(VoxelPosition.Z <= Height)
 				 {
-				 	Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Grass);
-				 } else
-				 {
-				 	Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Air);
+					Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Grass);
 				 }
+				if(VoxelPosition.Z <= Height / 2)
+				{
+					Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Dirt);
+				}
+				if(VoxelPosition.Z > Height)
+				{
+					Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Air);
+				}
+
 
 				Chunk.Voxels.Add(Voxel);
 			}
@@ -72,6 +78,7 @@ void AVoxelChunk::CreateChunk()
 	}
 	
 	ChunkMesh->VoxelMaterial = WorldData->VoxelMaterial;
+	ChunkMesh->DirtMaterial = WorldData->Dirt;
 	ChunkMesh->ChunkToQuads(Chunk.Voxels);
 }
 

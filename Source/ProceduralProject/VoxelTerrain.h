@@ -19,6 +19,9 @@ struct FVoxelTerrainData
 	UMaterial* VoxelMaterial;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UMaterial* Dirt;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	int32 Seed = 0;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)

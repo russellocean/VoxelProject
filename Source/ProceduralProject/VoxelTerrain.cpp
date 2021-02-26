@@ -21,12 +21,11 @@ void AVoxelTerrain::InitializeChunk(const FIntVector ChunkPosition)
 	TerrainData.VoxelChunks.Add(ChunkPosition, Chunk);
 }
 
-void AVoxelTerrain::CheckChunks(FVector PlayerChunkPosition)
+void AVoxelTerrain::CheckChunks(const FVector PlayerChunkPosition)
 {
 	for(auto& Elem : TerrainData.VoxelChunks)
 	{
 		AVoxelChunk* Chunk = Elem.Value;
-		// If the chunks x is less than PlayerChunkPosition - Renderdistance OR PlayerChunkPosition + renderdistance REMOVE IT!
 		if(Chunk->GetChunkPosition().X < PlayerChunkPosition.X - TerrainData.RenderDistance || Chunk->GetChunkPosition().X > PlayerChunkPosition.X + TerrainData.RenderDistance)
 		{
 			Chunk->Destroy();
@@ -36,7 +35,6 @@ void AVoxelTerrain::CheckChunks(FVector PlayerChunkPosition)
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("ChunkDeleted X")));
 			}
 			continue;
-			//DELETE CHUNK
 		}
 		if(Chunk->GetChunkPosition().Y < PlayerChunkPosition.Y - TerrainData.RenderDistance || Chunk->GetChunkPosition().Y > PlayerChunkPosition.Y + TerrainData.RenderDistance)
 		{
@@ -47,7 +45,6 @@ void AVoxelTerrain::CheckChunks(FVector PlayerChunkPosition)
 				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("ChunkDeleted Y")));
 			}
 			continue;
-			//DELETE CHUNK
 		}
 		/*if(Chunk->GetChunkPosition().Z < PlayerChunkPosition.Z - TerrainData.RenderDistance || Chunk->GetChunkPosition().Z > PlayerChunkPosition.Z + TerrainData.RenderDistance)
 		{
@@ -68,7 +65,8 @@ void AVoxelTerrain::Tick(float DeltaTime)
 {
 	const FVector PlayerPosition = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation() / 100;
 	const FVector PlayerChunkPosition = FVector(PlayerPosition.X / 16, PlayerPosition.Y / 16, PlayerPosition.Z / 16);
-	/*if(GEngine)
+	
+	/*if(GEngine) Track player position + Player Chunk position
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Current Player Position: %f, %f, %f"), PlayerPosition.X, PlayerPosition.Y, PlayerPosition.Z));
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Current Player Chunk Position: %f, %f, %f"), PlayerChunkPosition.X, PlayerChunkPosition.Y, PlayerChunkPosition.Z));
