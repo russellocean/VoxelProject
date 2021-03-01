@@ -23,6 +23,8 @@ struct FUniqueVoxelTypes
 
 	TArray<FLinearColor> VertexColors;
 	TArray<FVector2D> UVs;
+
+	int32 TriOffset {0};
 };
 
 

@@ -1,4 +1,5 @@
 ﻿#include "VoxelChunk.h"
+
 #include "VoxelTerrain.h"
 
 AVoxelChunk::AVoxelChunk()
@@ -8,13 +9,14 @@ AVoxelChunk::AVoxelChunk()
 	ChunkMesh->bUseAsyncCooking = true;
 }
 
-void AVoxelChunk::Initialize(const FIntVector ChunkCoords, FVoxelTerrainData* TerrainData)
+void AVoxelChunk::Initialize(const FIntVector ChunkCoords, FVoxelTerrainSettings* TerrainSettings)
 {
 	if (Chunk.IsNewChunk)
 	{
-		WorldData = TerrainData;
+		WorldSettings = TerrainSettings;
 		Chunk.ChunkPosition = ChunkCoords;
-		CreateChunk();
+		CreateChunkData();
+
 		Chunk.IsNewChunk = false;
 	}
 	else
@@ -26,7 +28,7 @@ void AVoxelChunk::Initialize(const FIntVector ChunkCoords, FVoxelTerrainData* Te
 
 // xyz global space | ijk local chunk space
 
-void AVoxelChunk::CreateChunk()
+void AVoxelChunk::CreateChunkData()
 {
 	//Loop from bottom to top
 	for (int32 k = 0; k < Chunk.ChunkSize; k++)
@@ -43,32 +45,20 @@ void AVoxelChunk::CreateChunk()
 					k + (Chunk.ChunkSize * Chunk.ChunkPosition.Z)
 				};
 
-				const double Height = UNoiseBlueprintFunctionLibrary::GetSimplex2D( WorldData->Seed, WorldData->Frequency, FVector2D(VoxelPosition.X,VoxelPosition.Y))
-				* 15 * 3;
-
-				 // if(UNoiseBlueprintFunctionLibrary::GetSimplex3D(WorldData->Seed, WorldData->Frequency, FVector(VoxelPosition.X+1,VoxelPosition.Y,VoxelPosition.Z)) <= 0.01f)
-				 // {
-				 // 	Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Air);
-				 // } else
-				 // {
-				 // 	Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Grass);
-				 // }
+				const double Height = UNoiseBlueprintFunctionLibrary::GetSimplex2D( WorldSettings->Seed, WorldSettings->Frequency, FVector2D(VoxelPosition.X,VoxelPosition.Y)) * 15 * 3;
 
 				 if(VoxelPosition.Z <= Height)
 				 {
 					Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Grass);
+				 	if(UNoiseBlueprintFunctionLibrary::GetSimplex3D(WorldSettings->Seed, WorldSettings->Frequency * 3, FVector(VoxelPosition.X+1,VoxelPosition.Y,VoxelPosition.Z)) <= 0.1f)
+				 	{
+				 		Voxel->SetType(Dirt);
+				 	}
+				 } else
+				 {
+				 	Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Air);
 				 }
-				if(VoxelPosition.Z <= Height / 2)
-				{
-					Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Dirt);
-				}
-				if(VoxelPosition.Z > Height)
-				{
-					Voxel->Initialize(VoxelPosition, FIntVector(i,j,k), Air);
-				}
-
-
-				Chunk.Voxels.Add(Voxel);
+				 Chunk.Voxels.Add(Voxel);
 			}
 		}
 	}
@@ -76,10 +66,8 @@ void AVoxelChunk::CreateChunk()
 	{		
 		Chunk.Voxels[v]->SetVisibility(CheckVoxelNeighbors(v));
 	}
-	
-	ChunkMesh->VoxelMaterial = WorldData->VoxelMaterial;
-	ChunkMesh->DirtMaterial = WorldData->Dirt;
-	ChunkMesh->ChunkToQuads(Chunk.Voxels);
+	ChunkMesh->VoxelMaterial = WorldSettings->VoxelMaterial;
+	ChunkMesh->DirtMaterial = WorldSettings->Dirt;
 }
 
 bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
@@ -146,6 +134,50 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 	return true;
 }
 
+void AVoxelChunk::RefreshChunk(const bool bCheckNeighbors)
+{
+	auto& VoxelChunks = AVoxelTerrain::VoxelChunks;
+	//WorldData = &AVoxelTerrain::VoxelTerrainData;
+	if(bCheckNeighbors)
+	{
+		if(VoxelChunks.Contains(FIntVector(GetChunkPosition().X+1, GetChunkPosition().Y, GetChunkPosition().Z)))
+		{
+			FChunkData* ChunkData = VoxelChunks.FindRef(FIntVector(GetChunkPosition().X+1, GetChunkPosition().Y, GetChunkPosition().Z))->GetChunkData();
+			SetChunkNeighbor(ChunkData, 0);
+		}
+		if(VoxelChunks.Contains(FIntVector(GetChunkPosition().X-1, GetChunkPosition().Y, GetChunkPosition().Z)))
+		{
+			FChunkData* ChunkData = VoxelChunks.FindRef(FIntVector(GetChunkPosition().X-1, GetChunkPosition().Y, GetChunkPosition().Z))->GetChunkData();
+			SetChunkNeighbor(ChunkData, 1);
+		}
+		if(VoxelChunks.Contains(FIntVector(GetChunkPosition().X, GetChunkPosition().Y+1, GetChunkPosition().Z)))
+		{
+			FChunkData* ChunkData = VoxelChunks.FindRef(FIntVector(GetChunkPosition().X, GetChunkPosition().Y+1, GetChunkPosition().Z))->GetChunkData();
+			SetChunkNeighbor(ChunkData, 2);
+		}
+		if(VoxelChunks.Contains(FIntVector(GetChunkPosition().X+1, GetChunkPosition().Y-1, GetChunkPosition().Z)))
+		{
+			FChunkData* ChunkData = VoxelChunks.FindRef(FIntVector(GetChunkPosition().X, GetChunkPosition().Y-1, GetChunkPosition().Z))->GetChunkData();
+			SetChunkNeighbor(ChunkData, 3);
+		}
+		if(VoxelChunks.Contains(FIntVector(GetChunkPosition().X, GetChunkPosition().Y, GetChunkPosition().Z+1)))
+		{
+			FChunkData* ChunkData = VoxelChunks.FindRef(FIntVector(GetChunkPosition().X, GetChunkPosition().Y, GetChunkPosition().Z+1))->GetChunkData();
+			SetChunkNeighbor(ChunkData, 4);
+		}
+		if(VoxelChunks.Contains(FIntVector(GetChunkPosition().X, GetChunkPosition().Y, GetChunkPosition().Z-1)))
+		{
+			FChunkData* ChunkData = VoxelChunks.FindRef(FIntVector(GetChunkPosition().X, GetChunkPosition().Y, GetChunkPosition().Z-1))->GetChunkData();
+			SetChunkNeighbor(ChunkData, 5);
+		}
+	}
+	if(Chunk.NeighborChunks.Num() == 6)
+	{
+		Chunk.IsVisible = true;
+		ChunkMesh->ChunkToQuads(Chunk.Voxels);
+	}
+}
+
 FIntVector AVoxelChunk::GetChunkPosition() const { return Chunk.ChunkPosition; }
 
 UVoxel* AVoxelChunk::GetVoxelAt(const FIntVector VoxelLocalPosition)
@@ -155,11 +187,11 @@ UVoxel* AVoxelChunk::GetVoxelAt(const FIntVector VoxelLocalPosition)
 
 FChunkData* AVoxelChunk::GetChunkData() { return &Chunk; }
 
-void AVoxelChunk::SetChunkNeighbor(FChunkData* ChunkData, const int32 Direction) { Chunk.NeighborChunks[Direction] = ChunkData; }
+void AVoxelChunk::SetChunkNeighbor(FChunkData* ChunkData, const int32 Direction) { Chunk.NeighborChunks.Emplace(Direction, ChunkData); }
 
 FChunkData* AVoxelChunk::GetChunkNeighbor(const int32 Direction) { return Chunk.NeighborChunks[Direction]; }
 
-const FIntVector AVoxelChunk::NeighborOffsets[]{
+const FIntVector AVoxelChunk::NeighborOffsets[] {
 	FIntVector(1, 0, 0),
 	FIntVector(-1, 0, 0),
 	FIntVector(0, 1, 0),

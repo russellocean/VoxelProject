@@ -90,15 +90,6 @@ void UChunkMesher::ChunkToQuads(TArray<UVoxel*> Voxels)
 void UChunkMesher::DrawQuad(FQuad* Quad, const int Direction, const EType VoxelType)
 {;
 	const FIntVector QOrigin = FIntVector(Quad->X, Quad->Y, Quad->Z);
-
-	if(!VoxelTypes.Contains(VoxelType))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Something went wrong"))
-	} else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Something went right"))
-	}
-
 	
 	FUniqueVoxelTypes* VoxelSection = VoxelTypes.Find(VoxelType);
 	
@@ -151,6 +142,8 @@ void UChunkMesher::DrawQuad(FQuad* Quad, const int Direction, const EType VoxelT
 		};
 	}
 
+	TriOffset = VoxelSection->TriOffset;
+	
 	if(Direction % 2 == 0)
 	{
 		AddTriangle(2,1,0, &VoxelSection->Triangles);
@@ -161,7 +154,8 @@ void UChunkMesher::DrawQuad(FQuad* Quad, const int Direction, const EType VoxelT
 		AddTriangle(0,2,3, &VoxelSection->Triangles);
 	}
 
-	TriOffset += 4;
+	VoxelSection->TriOffset += 4;
+
 	
 	VoxelSection->UVs.Add(FVector2D(0, 0));
 	VoxelSection->UVs.Add(FVector2D(1, 0));

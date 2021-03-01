@@ -9,6 +9,7 @@
 #include "GameFramework/Actor.h"
 #include "VoxelChunk.generated.h"
 
+struct FVoxelTerrainSettings;
 struct FVoxelTerrainData;
 USTRUCT(BlueprintType)
 struct FChunkData
@@ -21,6 +22,8 @@ struct FChunkData
 	//Dont like storing this, must be a better way to detect first time generation, maybe check if already written to disk?
 	bool IsNewChunk = true;
 
+	bool IsVisible = false;
+
 	static const int32 ChunkSize = 16;
 	static const int32 ChunkSizeSquared = 256;
 	static const int32 ChunkSizeCubed = 4096;
@@ -28,7 +31,8 @@ struct FChunkData
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Chunk)
 	TArray<UVoxel*> Voxels;
 
-	FChunkData *NeighborChunks[6];
+	TMap<int32, FChunkData*> NeighborChunks;
+	//FChunkData *NeighborChunks[6];
 };
 
 UCLASS(BlueprintType)
@@ -46,7 +50,7 @@ public:
 	AVoxelChunk();
 
 	//Must be called after voxel constructed
-	void Initialize(const FIntVector ChunkCoords, FVoxelTerrainData* TerrainData);
+	void Initialize(const FIntVector ChunkCoords, FVoxelTerrainSettings* TerrainSettings);
 
 	FIntVector GetChunkPosition() const;
 
@@ -57,11 +61,13 @@ public:
 	void SetChunkNeighbor(FChunkData* ChunkData, int32 Direction);
 	FChunkData* GetChunkNeighbor(int32 Direction);
 
+	void RefreshChunk(bool bCheckNeighbors);
+
 private:
-	void CreateChunk();
+	void CreateChunkData();
 	bool CheckVoxelNeighbors(int32 VoxelIndex);
 
 	static const FIntVector NeighborOffsets[6];
 
-	FVoxelTerrainData* WorldData;
+	FVoxelTerrainSettings* WorldSettings;
 };

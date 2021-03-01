@@ -1,6 +1,9 @@
 ﻿#include "VoxelTerrain.h"
+#include "DrawDebugHelpers.h"
 
 #include "VoxelChunk.h"
+
+TMap<FIntVector, AVoxelChunk*> AVoxelTerrain::VoxelChunks;
 
 AVoxelTerrain::AVoxelTerrain()
 {
@@ -16,49 +19,9 @@ void AVoxelTerrain::BeginPlay()
 void AVoxelTerrain::InitializeChunk(const FIntVector ChunkPosition)
 {
 	AVoxelChunk* Chunk = static_cast<AVoxelChunk*>(GetWorld()->SpawnActor(AVoxelChunk::StaticClass()));
-	Chunk->Initialize(ChunkPosition, &TerrainData);
+	Chunk->Initialize(ChunkPosition, &VoxelTerrainSettings);
 
-	TerrainData.VoxelChunks.Add(ChunkPosition, Chunk);
-}
-
-void AVoxelTerrain::CheckChunks(const FVector PlayerChunkPosition)
-{
-	for(auto& Elem : TerrainData.VoxelChunks)
-	{
-		AVoxelChunk* Chunk = Elem.Value;
-		if(Chunk->GetChunkPosition().X < PlayerChunkPosition.X - TerrainData.RenderDistance || Chunk->GetChunkPosition().X > PlayerChunkPosition.X + TerrainData.RenderDistance)
-		{
-			Chunk->Destroy();
-			TerrainData.VoxelChunks.Remove(Chunk->GetChunkPosition());
-			if(GEngine)
-			{
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("ChunkDeleted X")));
-			}
-			continue;
-		}
-		if(Chunk->GetChunkPosition().Y < PlayerChunkPosition.Y - TerrainData.RenderDistance || Chunk->GetChunkPosition().Y > PlayerChunkPosition.Y + TerrainData.RenderDistance)
-		{
-			Chunk->Destroy();
-			TerrainData.VoxelChunks.Remove(Chunk->GetChunkPosition());
-			if(GEngine)
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("ChunkDeleted Y")));
-			}
-			continue;
-		}
-		/*if(Chunk->GetChunkPosition().Z < PlayerChunkPosition.Z - TerrainData.RenderDistance || Chunk->GetChunkPosition().Z > PlayerChunkPosition.Z + TerrainData.RenderDistance)
-		{
-			Chunk->Destroy();
-			TerrainData.VoxelChunks.Remove(Chunk->GetChunkPosition());
-			if(GEngine)
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("ChunkDeleted Z")));
-			}
-			//DELETE CHUNK
-		}*/
-		//Elem.Key,
-		//*Elem.Value
-	}
+	VoxelChunks.Add(ChunkPosition, Chunk);
 }
 
 void AVoxelTerrain::Tick(float DeltaTime)
@@ -66,21 +29,23 @@ void AVoxelTerrain::Tick(float DeltaTime)
 	const FVector PlayerPosition = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation() / 100;
 	const FVector PlayerChunkPosition = FVector(PlayerPosition.X / 16, PlayerPosition.Y / 16, PlayerPosition.Z / 16);
 	
-	/*if(GEngine) Track player position + Player Chunk position
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Current Player Position: %f, %f, %f"), PlayerPosition.X, PlayerPosition.Y, PlayerPosition.Z));
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Current Player Chunk Position: %f, %f, %f"), PlayerChunkPosition.X, PlayerChunkPosition.Y, PlayerChunkPosition.Z));
-	}*/
+	// if(GEngine)
+	// {
+	// 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Current Player Position: %f, %f, %f"), PlayerPosition.X, PlayerPosition.Y, PlayerPosition.Z));
+	// 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Current Player Chunk Position: %f, %f, %f"), PlayerChunkPosition.X, PlayerChunkPosition.Y, PlayerChunkPosition.Z));
+	// }
 
-	for (int32 x = PlayerChunkPosition.X-TerrainData.RenderDistance; x < PlayerChunkPosition.X+TerrainData.RenderDistance; x++)
+	for (int32 x = PlayerChunkPosition.X-VoxelTerrainSettings.RenderDistance; x < PlayerChunkPosition.X+VoxelTerrainSettings.RenderDistance; x++)
 	{
-		for (int32 y = PlayerChunkPosition.Y-TerrainData.RenderDistance; y < PlayerChunkPosition.Y+TerrainData.RenderDistance; y++)
+		for (int32 y = PlayerChunkPosition.Y-VoxelTerrainSettings.RenderDistance; y < PlayerChunkPosition.Y+VoxelTerrainSettings.RenderDistance; y++)
 		{
 			for (int32 z = -2; z <= 1; z++)
 			{
-				if(!TerrainData.VoxelChunks.Contains(FIntVector(x,y,z)))
+				if(!VoxelChunks.Contains(FIntVector(x,y,z)))
 				{
 					InitializeChunk(FIntVector(x,y,z));
+					DrawDebugBox(GetWorld(), FVector((x*1600)+800,(y*1600)+800,(z*1600)+800), FVector(800,800,800), FColor::Blue, true, 60.f, ECC_WorldStatic, 5.f);
+					
 					CheckChunks(PlayerChunkPosition);
 				}
 			}
@@ -90,3 +55,26 @@ void AVoxelTerrain::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void AVoxelTerrain::CheckChunks(const FVector PlayerChunkPosition) const
+{
+	for(auto& Elem : VoxelChunks)
+	{
+		AVoxelChunk* Chunk = Elem.Value;
+		if(Chunk->GetChunkPosition().X < PlayerChunkPosition.X - VoxelTerrainSettings.RenderDistance || Chunk->GetChunkPosition().X > PlayerChunkPosition.X + VoxelTerrainSettings.RenderDistance)
+		{
+			Chunk->Destroy();
+			VoxelChunks.Remove(Chunk->GetChunkPosition());
+			continue;
+		}
+		if(Chunk->GetChunkPosition().Y < PlayerChunkPosition.Y - VoxelTerrainSettings.RenderDistance || Chunk->GetChunkPosition().Y > PlayerChunkPosition.Y + VoxelTerrainSettings.RenderDistance)
+		{
+			Chunk->Destroy();
+			VoxelChunks.Remove(Chunk->GetChunkPosition());
+			continue;
+		}
+		if(!Chunk->GetChunkData()->IsVisible)
+		{
+			Chunk->RefreshChunk(true);
+		}
+	}
+}
