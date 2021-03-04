@@ -62,15 +62,11 @@ void AVoxelChunk::CreateChunkData()
 			}
 		}
 	}
-	for(int32 v = 0; v < Chunk.Voxels.Num(); v++)
-	{		
-		Chunk.Voxels[v]->SetVisibility(CheckVoxelNeighbors(v));
-	}
 	ChunkMesh->VoxelMaterial = WorldSettings->VoxelMaterial;
 	ChunkMesh->DirtMaterial = WorldSettings->Dirt;
 }
 
-bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
+bool AVoxelChunk::CalculateVoxelNeighbors(const int32 VoxelIndex)
 {
 	int32 TotalNeighbors = 0;
 	UVoxel* Voxel = Chunk.Voxels[VoxelIndex];
@@ -81,57 +77,49 @@ bool AVoxelChunk::CheckVoxelNeighbors(const int32 VoxelIndex)
 	if(Voxel->GetLocalPosition().X != Chunk.ChunkSize - 1)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex + 1]->GetType(), 0);
-		if(Voxel->GetNeighbor(0) != Air)
-		{
-			TotalNeighbors++;
-		}
 	}
+	else
+	{
+		FChunkData* ChunkData = Chunk.NeighborChunks[0];
+		const FIntVector& VoxelLocalPosition = Voxel->GetLocalPosition();
+		Voxel->SetNeighbor(ChunkData->Voxels[(Chunk.ChunkSizeSquared * VoxelLocalPosition.Z) + 16]->GetType(), 0);
+    }
+
 	if(Voxel->GetLocalPosition().X != 0)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex - 1]->GetType(), 1);
-		if(Voxel->GetNeighbor(1) != Air)
-		{
-			TotalNeighbors++;
-		}
+	}
+	else
+	{
+		FChunkData* ChunkData = Chunk.NeighborChunks[1];
+		const FIntVector& VoxelLocalPosition = Voxel->GetLocalPosition();
+		Voxel->SetNeighbor(ChunkData->Voxels[(Chunk.ChunkSizeSquared * VoxelLocalPosition.Z) + 15]->GetType(), 1);
 	}
 	if(Voxel->GetLocalPosition().Y != Chunk.ChunkSize - 1)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex + 16]->GetType(), 2);
-		if(Voxel->GetNeighbor(2) != Air)
-		{
-			TotalNeighbors++;
-		}
 	}
 	if(Voxel->GetLocalPosition().Y != 0)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex - 16]->GetType(), 3);
-		if(Voxel->GetNeighbor(3) != Air)
-		{
-			TotalNeighbors++;
-		} 
 	}
 	if(Voxel->GetLocalPosition().Z != Chunk.ChunkSize - 1)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex + 256]->GetType(), 4);
-		if(Voxel->GetNeighbor(4) != Air)
-		{
-			TotalNeighbors++;
-		} 
 	}
 	if(Voxel->GetLocalPosition().Z != 0)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex - 256]->GetType(), 5);
-		if(Voxel->GetNeighbor(5) != Air)
-		{
-			TotalNeighbors++;
-		} 
 	}
-	
-	if(TotalNeighbors == 6)
+
+	for(int n = 0; n < 6; n++)
 	{
-		return false; //Voxel should be culled
+		if(Voxel->GetNeighbor(n) == Air)
+		{
+			return true;
+		}
 	}
-	return true;
+	return false;
 }
 
 void AVoxelChunk::RefreshChunk(const bool bCheckNeighbors)
@@ -144,7 +132,7 @@ void AVoxelChunk::RefreshChunk(const bool bCheckNeighbors)
 		{
 			FChunkData* ChunkData = VoxelChunks.FindRef(FIntVector(GetChunkPosition().X+1, GetChunkPosition().Y, GetChunkPosition().Z))->GetChunkData();
 			SetChunkNeighbor(ChunkData, 0);
-		}
+		} 
 		if(VoxelChunks.Contains(FIntVector(GetChunkPosition().X-1, GetChunkPosition().Y, GetChunkPosition().Z)))
 		{
 			FChunkData* ChunkData = VoxelChunks.FindRef(FIntVector(GetChunkPosition().X-1, GetChunkPosition().Y, GetChunkPosition().Z))->GetChunkData();
@@ -173,6 +161,10 @@ void AVoxelChunk::RefreshChunk(const bool bCheckNeighbors)
 	}
 	if(Chunk.NeighborChunks.Num() == 6)
 	{
+		for(int32 v = 0; v < Chunk.Voxels.Num(); v++)
+		{		
+			Chunk.Voxels[v]->SetVisibility(CalculateVoxelNeighbors(v));
+		}
 		Chunk.IsVisible = true;
 		ChunkMesh->ChunkToQuads(Chunk.Voxels);
 	}

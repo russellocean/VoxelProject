@@ -65,7 +65,7 @@ public:
 
 private:
 	void CreateChunkData();
-	bool CheckVoxelNeighbors(int32 VoxelIndex);
+	bool CalculateVoxelNeighbors(int32 VoxelIndex);
 
 	static const FIntVector NeighborOffsets[6];
 

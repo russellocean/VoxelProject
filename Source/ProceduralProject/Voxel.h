@@ -25,7 +25,6 @@ struct FVoxelData
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Voxel)
 	FIntVector VoxelLocalPosition;
 
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Voxel)
 	TEnumAsByte<EType> VoxelType;
 	
