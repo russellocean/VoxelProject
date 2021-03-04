@@ -74,42 +74,58 @@ bool AVoxelChunk::CalculateVoxelNeighbors(const int32 VoxelIndex)
 	{
 		return false;
 	}
+	
 	if(Voxel->GetLocalPosition().X != Chunk.ChunkSize - 1)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex + 1]->GetType(), 0);
-	}
-	else
+	} else
 	{
 		FChunkData* ChunkData = Chunk.NeighborChunks[0];
-		const FIntVector& VoxelLocalPosition = Voxel->GetLocalPosition();
-		Voxel->SetNeighbor(ChunkData->Voxels[(Chunk.ChunkSizeSquared * VoxelLocalPosition.Z) + 16]->GetType(), 0);
-    }
-
+		Voxel->SetNeighbor(ChunkData->Voxels[VoxelIndex - 15]->GetType(), 0);
+	}
+	
 	if(Voxel->GetLocalPosition().X != 0)
 	{
 		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex - 1]->GetType(), 1);
-	}
-	else
+	} else
 	{
 		FChunkData* ChunkData = Chunk.NeighborChunks[1];
-		const FIntVector& VoxelLocalPosition = Voxel->GetLocalPosition();
-		Voxel->SetNeighbor(ChunkData->Voxels[(Chunk.ChunkSizeSquared * VoxelLocalPosition.Z) + 15]->GetType(), 1);
+		Voxel->SetNeighbor(ChunkData->Voxels[VoxelIndex + 15]->GetType(), 1);
 	}
+	
 	if(Voxel->GetLocalPosition().Y != Chunk.ChunkSize - 1)
 	{
-		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex + 16]->GetType(), 2);
+		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex + Chunk.ChunkSize]->GetType(), 2);
+	} else
+	{
+		FChunkData* ChunkData = Chunk.NeighborChunks[2];
+		Voxel->SetNeighbor(ChunkData->Voxels[VoxelIndex - 240]->GetType(), 2);
 	}
+	
 	if(Voxel->GetLocalPosition().Y != 0)
 	{
-		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex - 16]->GetType(), 3);
+		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex - + Chunk.ChunkSize]->GetType(), 3);
+	} else
+	{
+		FChunkData* ChunkData = Chunk.NeighborChunks[3];
+		Voxel->SetNeighbor(ChunkData->Voxels[VoxelIndex + 240]->GetType(), 3);
 	}
+	
 	if(Voxel->GetLocalPosition().Z != Chunk.ChunkSize - 1)
 	{
-		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex + 256]->GetType(), 4);
+		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex + Chunk.ChunkSizeSquared]->GetType(), 4);
+	} else
+	{
+		FChunkData* ChunkData = Chunk.NeighborChunks[4];
+		Voxel->SetNeighbor(ChunkData->Voxels[VoxelIndex - 3840]->GetType(), 4);
 	}
 	if(Voxel->GetLocalPosition().Z != 0)
 	{
-		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex - 256]->GetType(), 5);
+		Voxel->SetNeighbor(Chunk.Voxels[VoxelIndex - Chunk.ChunkSizeSquared]->GetType(), 5);
+	} else
+	{
+		FChunkData* ChunkData = Chunk.NeighborChunks[5];
+		Voxel->SetNeighbor(ChunkData->Voxels[VoxelIndex + 3840]->GetType(), 5);
 	}
 
 	for(int n = 0; n < 6; n++)
