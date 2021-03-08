@@ -42,7 +42,7 @@
 #include <ctime>
 
 #include "thirdparty.hpp"
-#include "../instantiationsRdEditorProtocol.h"
+#include "../instantiations.h"
 
 #include "UE4TypesMarshallers.h"
 

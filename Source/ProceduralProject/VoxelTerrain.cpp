@@ -1,5 +1,6 @@
 ﻿#include "VoxelTerrain.h"
 #include "DrawDebugHelpers.h"
+#include "NavigationOctree.h"
 
 #include "VoxelChunk.h"
 
@@ -13,6 +14,9 @@ AVoxelTerrain::AVoxelTerrain()
 void AVoxelTerrain::BeginPlay()
 {
 	Super::BeginPlay();
+
+	TOctree2<EType, FIntVector> Octree = TOctree2<EType, FIntVector>(FVector(0,0,0), VoxelTerrainSettings.RenderDistance);
+	Octree.AddElement(Dirt);
 }
 
 void AVoxelTerrain::InitializeChunk(const FIntVector ChunkPosition)
@@ -48,22 +52,20 @@ void AVoxelTerrain::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AVoxelTerrain::CheckChunks(const FVector PlayerChunkPosition) const
+void AVoxelTerrain::CheckChunks(FVector PlayerChunkPosition)
 {
 	for(auto& Elem : VoxelChunks)
 	{
 		AVoxelChunk* Chunk = Elem.Value;
 		if(Chunk->GetChunkPosition().X < PlayerChunkPosition.X - VoxelTerrainSettings.RenderDistance || Chunk->GetChunkPosition().X > PlayerChunkPosition.X + VoxelTerrainSettings.RenderDistance)
 		{
-			Chunk->Destroy();
 			VoxelChunks.Remove(Chunk->GetChunkPosition());
-			continue;
+			Chunk->Destroy();
 		}
 		if(Chunk->GetChunkPosition().Y < PlayerChunkPosition.Y - VoxelTerrainSettings.RenderDistance || Chunk->GetChunkPosition().Y > PlayerChunkPosition.Y + VoxelTerrainSettings.RenderDistance)
 		{
-			Chunk->Destroy();
 			VoxelChunks.Remove(Chunk->GetChunkPosition());
-			continue;
+			Chunk->Destroy();
 		}
 		if(!Chunk->GetChunkData()->IsVisible)
 		{

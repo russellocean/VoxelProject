@@ -42,7 +42,7 @@
 #include <ctime>
 
 #include "thirdparty.hpp"
-#include "../instantiationsLibrary.h"
+#include "../instantiations.h"
 
 #include "IScriptCallStack.Generated.h"
 

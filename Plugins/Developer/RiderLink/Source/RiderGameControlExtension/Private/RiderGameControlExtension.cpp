@@ -33,16 +33,6 @@ IMPLEMENT_MODULE(FRiderGameControlExtensionModule, RiderGameControlExtension);
 
 extern UNREALED_API class UUnrealEdEngine* GUnrealEd;
 
-class FSetForTheScope
-{
-public:
-    explicit FSetForTheScope(bool& bValue) : bProxyValue(bValue) { bProxyValue = true; }
-    ~FSetForTheScope() { bProxyValue = false; }
-
-private:
-    bool& bProxyValue;
-};
-
 static int NumberOfPlayers(int Mode) { return (Mode & 3) + 1; }
 
 static bool SpawnAtPlayerStart(int Mode) { return (Mode & 4) != 0; }
@@ -208,7 +198,72 @@ void RequestPlaySession(const FVector* StartLocation, const FRotator* StartRotat
 
 FSlateApplication* SlateApplication = nullptr;
 
-static void RequestPlay(int mode)
+struct FPlaySettings
+{
+    EPlayModeType PlayMode;
+    int32 NumberOfClients;
+    bool bNetDedicated;
+    bool bSpawnAtPlayerStart;
+
+    static FPlaySettings UnpackFromMode(int32_t mode)
+    {
+        FPlaySettings settings = {
+            PlayModeFromInt((mode & (16 + 32 + 64)) >> 4),
+            NumberOfPlayers(mode),
+            DedicatedServer(mode),
+            SpawnAtPlayerStart(mode),
+        };
+        return settings;
+    }
+
+    static int32_t PackToMode(const FPlaySettings& settings)
+    {
+        return (settings.NumberOfClients - 1) +
+            (settings.bSpawnAtPlayerStart ? (1 << 2) : 0) +
+            (settings.bNetDedicated ? (1 << 3) : 0) +
+            (PlayModeToInt(settings.PlayMode) << 4);
+    }
+};
+
+
+static FPlaySettings RetrieveSettings(ULevelEditorPlaySettings* PlayInSettings)
+{
+    check(PlayInSettings);
+
+    FPlaySettings settings;
+    settings.PlayMode = PlayInSettings->LastExecutedPlayModeType;
+    PlayInSettings->GetPlayNumberOfClients(settings.NumberOfClients);
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION <= 24
+    PlayInSettings->GetPlayNetDedicated(settings.bNetDedicated);
+#else
+    settings.bNetDedicated = PlayInSettings->bLaunchSeparateServer;
+#endif
+    settings.bSpawnAtPlayerStart = PlayInSettings->LastExecutedPlayModeLocation == PlayLocation_DefaultPlayerStart;
+
+    return settings;
+}
+
+static void UpdateSettings(ULevelEditorPlaySettings* PlayInSettings, const FPlaySettings& settings)
+{
+    check(PlayInSettings);
+    
+    PlayInSettings->SetPlayNumberOfClients(settings.NumberOfClients);
+#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION <= 24
+    PlayInSettings->SetPlayNetDedicated(settings.bNetDedicated);
+#else
+    PlayInSettings->bLaunchSeparateServer = settings.bNetDedicated;
+#endif
+    PlayInSettings->LastExecutedPlayModeLocation =
+        settings.bSpawnAtPlayerStart
+            ? PlayLocation_DefaultPlayerStart
+            : PlayLocation_CurrentCameraLocation;
+    PlayInSettings->LastExecutedPlayModeType = settings.PlayMode;
+
+    PlayInSettings->PostEditChange();
+    PlayInSettings->SaveConfig();
+}
+
+static void RequestPlay(int32_t mode)
 {
     FLevelEditorModule& LevelEditorModule =
         FModuleManager::GetModuleChecked<FLevelEditorModule>(
@@ -216,23 +271,13 @@ static void RequestPlay(int mode)
     auto ActiveLevelViewport = LevelEditorModule.GetFirstActiveViewport();
     ULevelEditorPlaySettings* PlayInSettings =
         GetMutableDefault<ULevelEditorPlaySettings>();
-    const EPlayModeType PlayMode = PlayModeFromInt((mode & (16 + 32 + 64)) >> 4);
-    const bool bSpawnAtPlayerStart = SpawnAtPlayerStart(mode);
+    FPlaySettings requestedSettings = FPlaySettings::UnpackFromMode(mode);
     if (PlayInSettings)
     {
-        PlayInSettings->SetPlayNumberOfClients(NumberOfPlayers(mode));
-#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION <= 24
-        PlayInSettings->SetPlayNetDedicated(DedicatedServer(mode));
-#else
-        PlayInSettings->bLaunchSeparateServer = DedicatedServer(mode);
-#endif
-        PlayInSettings->LastExecutedPlayModeLocation =
-            bSpawnAtPlayerStart
-                ? PlayLocation_DefaultPlayerStart
-                : PlayLocation_CurrentCameraLocation;
-        PlayInSettings->LastExecutedPlayModeType = PlayMode;
+        UpdateSettings(PlayInSettings, requestedSettings);
     }
-
+    const EPlayModeType PlayMode = requestedSettings.PlayMode;
+    const bool bSpawnAtPlayerStart = requestedSettings.bSpawnAtPlayerStart;
     const FVector* StartLocation = nullptr;
     const FRotator* StartRotation = nullptr;
     if (!bSpawnAtPlayerStart && SlateApplication && ActiveLevelViewport.IsValid() &&
@@ -283,26 +328,6 @@ static void RequestPlay(int mode)
     }
 }
 
-static int ModeFromSettings()
-{
-    ULevelEditorPlaySettings* PlayInSettings = GetMutableDefault<ULevelEditorPlaySettings>();
-    if (!PlayInSettings)
-        return 0;
-
-    int32 NumberOfClients;
-    bool bNetDedicated;
-    PlayInSettings->GetPlayNumberOfClients(NumberOfClients);
-#if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION <= 24
-    PlayInSettings->GetPlayNetDedicated(bNetDedicated);
-#else
-    bNetDedicated = PlayInSettings->bLaunchSeparateServer;
-#endif
-    const bool bSpawnAtPlayerStart = PlayInSettings->LastExecutedPlayModeLocation == PlayLocation_DefaultPlayerStart;
-    return (NumberOfClients - 1) + (bSpawnAtPlayerStart ? (1 << 2) : 0) + (bNetDedicated ? (1 << 3) : 0) +
-        (PlayModeToInt(PlayInSettings->LastExecutedPlayModeType) << 4);
-}
-
-
 void FRiderGameControlExtensionModule::StartupModule()
 {
     UE_LOG(FLogRiderGameControlExtensionModule, Verbose, TEXT("STARTUP START"));
@@ -317,11 +342,11 @@ void FRiderGameControlExtensionModule::StartupModule()
     JetBrains::EditorPlugin::RdEditorModel& UnrealToBackendModel = RdConnection.UnrealToBackendModel;
 
     const rd::Lifetime NestedLifetime = RiderLinkModule.CreateNestedLifetime();
-    RdConnection.Scheduler.queue([NestedLifetime, &UnrealToBackendModel]()
+    RdConnection.Scheduler.queue([NestedLifetime, &UnrealToBackendModel, this]()
     {
         UnrealToBackendModel.get_playStateFromRider().advise(
             NestedLifetime,
-            [&UnrealToBackendModel](JetBrains::EditorPlugin::PlayState State)
+            [&UnrealToBackendModel, this](JetBrains::EditorPlugin::PlayState State)
             {
                 if (!GUnrealEd) return;
 
@@ -343,8 +368,7 @@ void FRiderGameControlExtensionModule::StartupModule()
                     }
                     else
                     {
-                        const int Mode = UnrealToBackendModel.get_playMode().get();
-                        RequestPlay(Mode);
+                        RequestPlay(playMode);
                     }
                     break;
                 case JetBrains::EditorPlugin::PlayState::Pause:
@@ -357,6 +381,17 @@ void FRiderGameControlExtensionModule::StartupModule()
                     break;
                 }
             });
+        UnrealToBackendModel.get_playModeFromRider().advise(
+            NestedLifetime,
+            [&UnrealToBackendModel, this](int32_t mode)
+        {
+            ULevelEditorPlaySettings* PlayInSettings = GetMutableDefault<ULevelEditorPlaySettings>();
+            if (PlayInSettings)
+            {
+                const FPlaySettings NewSettings = FPlaySettings::UnpackFromMode(mode);
+                UpdateSettings(PlayInSettings, NewSettings);
+            }
+        });
     });
 
     RdConnection.Scheduler.queue([NestedLifetime, &UnrealToBackendModel]()
@@ -367,16 +402,23 @@ void FRiderGameControlExtensionModule::StartupModule()
 
             GUnrealEd->PlayWorld->bDebugFrameStepExecution = true;
             GUnrealEd->PlayWorld->bDebugPauseExecution = false;
+            GUnrealEd->PlaySessionSingleStepped();
         });
     });
 
     FEditorDelegates::BeginPIE.AddLambda([this, &RdConnection](const bool)
-    {
-        RdConnection.Scheduler.queue([&RdConnection]()
+    {        
+        ULevelEditorPlaySettings* PlayInSettings = GetMutableDefault<ULevelEditorPlaySettings>();
+        if (PlayInSettings)
+        {
+            FPlaySettings Settings = RetrieveSettings(PlayInSettings);
+            playMode = FPlaySettings::PackToMode(Settings);
+        }
+        RdConnection.Scheduler.queue([&RdConnection, _playMode = playMode]()
         {
             if (!GUnrealEd) return;
 
-            RdConnection.UnrealToBackendModel.get_playMode().set(ModeFromSettings());
+            RdConnection.UnrealToBackendModel.get_playModeFromEditor().fire(_playMode);
             RdConnection.UnrealToBackendModel.get_playStateFromEditor().fire(JetBrains::EditorPlugin::PlayState::Play);
         });
     });
@@ -411,10 +453,53 @@ void FRiderGameControlExtensionModule::StartupModule()
         });
     });
 
-    // Initial sync.
-    RdConnection.Scheduler.queue([&RdConnection]()
+    FEditorDelegates::SingleStepPIE.AddLambda([this, &RdConnection](const bool)
     {
-        RdConnection.UnrealToBackendModel.get_playMode().set(ModeFromSettings());
+        RdConnection.Scheduler.queue([&RdConnection]()
+        {
+            if (!GUnrealEd) return;
+
+            RdConnection.UnrealToBackendModel.get_playStateFromEditor().fire(JetBrains::EditorPlugin::PlayState::Play);
+            RdConnection.UnrealToBackendModel.get_playStateFromEditor().fire(JetBrains::EditorPlugin::PlayState::Pause);
+        });
+    });
+    
+    FCoreUObjectDelegates::OnObjectPropertyChanged.AddLambda(
+        [this, &RdConnection](UObject* obj, FPropertyChangedEvent& ev)
+        {
+            ULevelEditorPlaySettings* PlayInSettings = GetMutableDefault<ULevelEditorPlaySettings>();
+            if (!PlayInSettings || obj != PlayInSettings) return;
+                
+            const FPlaySettings Settings = RetrieveSettings(PlayInSettings);
+            int PlayModeNew = FPlaySettings::PackToMode(Settings);
+            if (PlayModeNew == playMode) return;
+
+            playMode = PlayModeNew;
+            RdConnection.Scheduler.queue([&RdConnection, PlayModeNew]()
+            {
+                if (!GUnrealEd) return;
+
+                RdConnection.UnrealToBackendModel.get_playModeFromEditor().fire(PlayModeNew);
+            });
+        });
+
+    // Initial sync.
+    ULevelEditorPlaySettings* PlayInSettings = GetMutableDefault<ULevelEditorPlaySettings>();
+    if (PlayInSettings)
+    {
+        const FPlaySettings Settings = RetrieveSettings(PlayInSettings);
+        playMode = FPlaySettings::PackToMode(Settings);
+    }
+    RdConnection.Scheduler.queue([&RdConnection, lambdaPlayMode=playMode]()
+    {        
+        RdConnection.UnrealToBackendModel.get_playModeFromEditor().fire(lambdaPlayMode);
+    });
+    RdConnection.Scheduler.queue([this, NestedLifetime, &RdConnection]()
+    {
+       RdConnection.UnrealToBackendModel.get_playModeFromRider().advise(NestedLifetime, [this](int32_t inPlayMode)
+       {
+           playMode = inPlayMode;
+       }); 
     });
     UE_LOG(FLogRiderGameControlExtensionModule, Verbose, TEXT("STARTUP FINISH"));
 }

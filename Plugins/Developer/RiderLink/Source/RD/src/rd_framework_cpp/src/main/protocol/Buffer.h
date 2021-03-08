@@ -1,7 +1,7 @@
 #ifndef RD_CPP_UNSAFEBUFFER_H
 #define RD_CPP_UNSAFEBUFFER_H
 
-#if _MSC_VER
+#if defined(_MSC_VER)
 #pragma warning(push)
 #pragma warning(disable:4251)
 #endif
@@ -195,6 +195,10 @@ public:
 
 	void write_char(wchar_t value);
 
+	void write_char16_string(const uint16_t* data, size_t len);
+
+	uint16_t * read_char16_string();
+
 	std::wstring read_wstring();
 
 	void write_wstring(std::wstring const& value);
@@ -318,7 +322,7 @@ public:
 	ByteArray& get_data();
 };
 }	 // namespace rd
-#if _MSC_VER
+#if defined(_MSC_VER)
 #pragma warning(pop)
 #endif
 

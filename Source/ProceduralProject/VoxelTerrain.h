@@ -52,7 +52,7 @@ protected:
 	
 	void InitializeChunk(FIntVector ChunkPosition);
 
-	void CheckChunks(FVector PlayerChunkPosition) const;
+	void CheckChunks(FVector PlayerChunkPosition);
 
 public:
 	virtual void Tick(float DeltaTime) override;

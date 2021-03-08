@@ -1,0 +1,22 @@
+#pragma once
+
+namespace VoxelTerrainUtil
+{
+	inline FIntVector WorldToChunkCoord(const FIntVector WorldLocation)
+	{
+		return (WorldLocation / 100) / 16;
+	}
+
+	inline FIntVector VoxelIndexToLocalCoords(const int32 VoxelIndex)
+	{ // look over this it doesnt work i think
+		int32 x = VoxelIndex % 16;
+		int32 y = (VoxelIndex / 16) % 16;
+		int32 z = VoxelIndex / (16 * 16);
+		return FIntVector(x,y,z);
+	}
+
+	/*inline FIntVector WorldToChunkCoord(const FIntVector WorldLocation)
+	{
+		return (WorldLocation / 100) / 16;
+	}*/
+}

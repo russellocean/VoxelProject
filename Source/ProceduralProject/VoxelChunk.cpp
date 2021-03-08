@@ -68,7 +68,6 @@ void AVoxelChunk::CreateChunkData()
 
 bool AVoxelChunk::CalculateVoxelNeighbors(const int32 VoxelIndex)
 {
-	int32 TotalNeighbors = 0;
 	UVoxel* Voxel = Chunk.Voxels[VoxelIndex];
 	if(Voxel->GetType() == Air)
 	{
@@ -141,7 +140,7 @@ bool AVoxelChunk::CalculateVoxelNeighbors(const int32 VoxelIndex)
 void AVoxelChunk::RefreshChunk(const bool bCheckNeighbors)
 {
 	auto& VoxelChunks = AVoxelTerrain::VoxelChunks;
-	//WorldData = &AVoxelTerrain::VoxelTerrainData;
+	
 	if(bCheckNeighbors)
 	{
 		if(VoxelChunks.Contains(FIntVector(GetChunkPosition().X+1, GetChunkPosition().Y, GetChunkPosition().Z)))
