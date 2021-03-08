@@ -30,6 +30,9 @@ struct FVoxelTerrainSettings
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	EInterp Interpolation;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	bool DebugMode;
 };
 
 UCLASS()
@@ -39,9 +42,8 @@ class PROCEDURALPROJECT_API AVoxelTerrain final : public AActor
 
 public:
 	AVoxelTerrain();
+	~AVoxelTerrain();
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Chunk)
-	//static FVoxelTerrainData VoxelTerrainData;
 	static TMap<FIntVector, AVoxelChunk*> VoxelChunks;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Chunk)

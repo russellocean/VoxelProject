@@ -34,7 +34,7 @@ class PROCEDURALPROJECT_API UChunkMesher : public UProceduralMeshComponent
 	GENERATED_BODY()
 
 public:
-	void ChunkToQuads(TArray<UVoxel*> Voxels);
+	void ChunkToQuads(TArray<UVoxel*> Voxels, const FIntVector ChunkCoords);
 
 	 UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	 UMaterial* VoxelMaterial;

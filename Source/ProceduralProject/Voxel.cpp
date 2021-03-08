@@ -1,20 +1,5 @@
 ﻿#include "Voxel.h"
 
-void UVoxel::Initialize(const FIntVector WorldPosition, const FIntVector LocalPosition, const TEnumAsByte<EType> Type)
-{
-	SetWorldPosition(WorldPosition);
-	SetLocalPosition(LocalPosition);
-	SetType(Type);
-}
-
-void UVoxel::SetWorldPosition(const FIntVector Position) { Voxel.VoxelWorldPosition = Position; }
-
-FIntVector UVoxel::GetWorldPosition() const { return Voxel.VoxelWorldPosition; }
-
-void UVoxel::SetLocalPosition(const FIntVector Position) { Voxel.VoxelLocalPosition = Position; }
-
-FIntVector UVoxel::GetLocalPosition() const { return Voxel.VoxelLocalPosition; }
-
 void UVoxel::SetType(const TEnumAsByte<EType> Type) { Voxel.VoxelType = Type; }
 
 TEnumAsByte<EType> UVoxel::GetType() const { return Voxel.VoxelType;}

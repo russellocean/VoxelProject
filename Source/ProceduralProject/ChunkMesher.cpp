@@ -1,6 +1,8 @@
 #include "ChunkMesher.h"
 
-void UChunkMesher::ChunkToQuads(TArray<UVoxel*> Voxels)
+#include "VoxelTerrainUtil.h"
+
+void UChunkMesher::ChunkToQuads(TArray<UVoxel*> Voxels, const FIntVector ChunkCoords)
 {
 	for (int v = 0; v < Voxels.Num(); v++)
 	{
@@ -10,7 +12,9 @@ void UChunkMesher::ChunkToQuads(TArray<UVoxel*> Voxels)
 			{
 				VoxelTypes.Add(Voxels[v]->GetType());
 			}
-			const FVector QuadOffset = FVector(Voxels[v]->GetWorldPosition()) * 100;
+
+			const FVector VoxelWorldPosition = FVector(VoxelTerrainUtil::VoxelIndexToWorldCoords(v, ChunkCoords));
+			const FVector QuadOffset = VoxelWorldPosition * 100;
 
 			for (int n = 0; n < 6; n++)
 			{

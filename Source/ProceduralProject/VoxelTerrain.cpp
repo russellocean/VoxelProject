@@ -1,7 +1,6 @@
 ﻿#include "VoxelTerrain.h"
-#include "DrawDebugHelpers.h"
-#include "NavigationOctree.h"
 
+#include "DrawDebugHelpers.h"
 #include "VoxelChunk.h"
 
 TMap<FIntVector, AVoxelChunk*> AVoxelTerrain::VoxelChunks;
@@ -11,12 +10,14 @@ AVoxelTerrain::AVoxelTerrain()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
+AVoxelTerrain::~AVoxelTerrain()
+{
+	VoxelChunks.Empty();
+}
+
 void AVoxelTerrain::BeginPlay()
 {
 	Super::BeginPlay();
-
-	TOctree2<EType, FIntVector> Octree = TOctree2<EType, FIntVector>(FVector(0,0,0), VoxelTerrainSettings.RenderDistance);
-	Octree.AddElement(Dirt);
 }
 
 void AVoxelTerrain::InitializeChunk(const FIntVector ChunkPosition)
@@ -41,9 +42,13 @@ void AVoxelTerrain::Tick(float DeltaTime)
 				if(!VoxelChunks.Contains(FIntVector(x,y,z)))
 				{
 					InitializeChunk(FIntVector(x,y,z));
-					//DrawDebugBox(GetWorld(), FVector((x*1600)+800,(y*1600)+800,(z*1600)+800), FVector(800,800,800), FColor::Blue, true, 60.f, ECC_WorldStatic, 5.f);
-					
 					CheckChunks(PlayerChunkPosition);
+					
+					if(VoxelTerrainSettings.DebugMode)
+					{
+						DrawDebugBox(GetWorld(), FVector((x*1600)+800,(y*1600)+800,(z*1600)+800), FVector(800,800,800), FColor::Blue, true, 60.f, ECC_WorldStatic, 5.f);
+					}
+
 				}
 			}
 		}
@@ -52,7 +57,7 @@ void AVoxelTerrain::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AVoxelTerrain::CheckChunks(FVector PlayerChunkPosition)
+void AVoxelTerrain::CheckChunks(const FVector PlayerChunkPosition)
 {
 	for(auto& Elem : VoxelChunks)
 	{

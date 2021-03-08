@@ -66,8 +66,6 @@ public:
 private:
 	void CreateChunkData();
 	bool CalculateVoxelNeighbors(int32 VoxelIndex);
-
-	static const FIntVector NeighborOffsets[6];
-
+	
 	FVoxelTerrainSettings* WorldSettings;
 };
