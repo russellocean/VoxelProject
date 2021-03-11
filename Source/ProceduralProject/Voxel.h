@@ -16,10 +16,9 @@ enum EType
 struct FVoxelData
 {
 	TEnumAsByte<EType> VoxelType;
+	EType Neighbors[6];
 	
 	bool bIsVisible;
-
-	EType Neighbors[6];
 };
 
 UCLASS()

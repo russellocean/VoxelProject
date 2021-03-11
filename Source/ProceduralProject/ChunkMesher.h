@@ -29,7 +29,7 @@ struct FUniqueVoxelTypes
 
 
 UCLASS()
-class PROCEDURALPROJECT_API UChunkMesher : public UProceduralMeshComponent
+class PROCEDURALPROJECT_API UChunkMesher final : public UProceduralMeshComponent
 {
 	GENERATED_BODY()
 

@@ -37,7 +37,7 @@ void AVoxelTerrain::Tick(float DeltaTime)
 	{
 		for (int32 y = PlayerChunkPosition.Y-VoxelTerrainSettings.RenderDistance; y < PlayerChunkPosition.Y+VoxelTerrainSettings.RenderDistance; y++)
 		{
-			for (int32 z = -2; z <= 1; z++)
+			for (int32 z = -2; z <= 2; z++)
 			{
 				if(!VoxelChunks.Contains(FIntVector(x,y,z)))
 				{
@@ -48,7 +48,6 @@ void AVoxelTerrain::Tick(float DeltaTime)
 					{
 						DrawDebugBox(GetWorld(), FVector((x*1600)+800,(y*1600)+800,(z*1600)+800), FVector(800,800,800), FColor::Blue, true, 60.f, ECC_WorldStatic, 5.f);
 					}
-
 				}
 			}
 		}
@@ -57,7 +56,7 @@ void AVoxelTerrain::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AVoxelTerrain::CheckChunks(const FVector PlayerChunkPosition)
+void AVoxelTerrain::CheckChunks(const FVector PlayerChunkPosition) const
 {
 	for(auto& Elem : VoxelChunks)
 	{

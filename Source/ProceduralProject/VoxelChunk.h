@@ -32,7 +32,6 @@ struct FChunkData
 	TArray<UVoxel*> Voxels;
 
 	TMap<int32, FChunkData*> NeighborChunks;
-	//FChunkData *NeighborChunks[6];
 };
 
 UCLASS(BlueprintType)
@@ -49,7 +48,7 @@ protected:
 public:
 	AVoxelChunk();
 
-	//Must be called after voxel constructed
+	//Must be called after chunk constructed
 	void Initialize(const FIntVector ChunkCoords, FVoxelTerrainSettings* TerrainSettings);
 
 	FIntVector GetChunkPosition() const;

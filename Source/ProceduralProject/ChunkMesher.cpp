@@ -73,7 +73,6 @@ void UChunkMesher::ChunkToQuads(TArray<UVoxel*> Voxels, const FIntVector ChunkCo
 	int32 SectionIndex = 0;
 	for(auto& Elem : VoxelTypes)
 	{
-		//FUniqueVoxelTypes* UniqueVoxelSection = Elem.Value;
 		CreateMeshSection_LinearColor(SectionIndex, Elem.Value.Vertices, Elem.Value.Triangles, TArray<FVector>(), Elem.Value.UVs, Elem.Value.VertexColors,
                               TArray<FProcMeshTangent>(), true);
 
@@ -170,7 +169,6 @@ void UChunkMesher::DrawQuad(FQuad* Quad, const int Direction, const EType VoxelT
 	VoxelSection->VertexColors.Add(FLinearColor::MakeRandomColor());
 	VoxelSection->VertexColors.Add(FLinearColor::MakeRandomColor());
 	VoxelSection->VertexColors.Add(FLinearColor::MakeRandomColor());
-
 }
 
 int32 UChunkMesher::VertexAO(const bool Side1, const bool Side2, const bool Corner)
